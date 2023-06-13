@@ -154,9 +154,10 @@ namespace E7CharactersManager
         }
 
         private void E7CharactersList_Load(object sender, EventArgs e) => LoadFilteredList();
-        private void checkListProperties_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
-        private void checkListGender_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
         private void checkListClass_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
         private void checkListElements_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
+        private void checkListRarity_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
+        private void checkListGender_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
+        private void checkListProperties_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
     }
 }

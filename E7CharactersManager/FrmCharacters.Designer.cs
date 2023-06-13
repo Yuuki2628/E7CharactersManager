@@ -78,7 +78,7 @@
             this.checkListGender.Location = new System.Drawing.Point(15, 251);
             this.checkListGender.Name = "checkListGender";
             this.checkListGender.Size = new System.Drawing.Size(161, 94);
-            this.checkListGender.TabIndex = 3;
+            this.checkListGender.TabIndex = 5;
             this.checkListGender.SelectedIndexChanged += new System.EventHandler(this.checkListGender_SelectedIndexChanged);
             // 
             // lblFilterGender
@@ -87,7 +87,7 @@
             this.lblFilterGender.Location = new System.Drawing.Point(12, 235);
             this.lblFilterGender.Name = "lblFilterGender";
             this.lblFilterGender.Size = new System.Drawing.Size(82, 13);
-            this.lblFilterGender.TabIndex = 2;
+            this.lblFilterGender.TabIndex = 4;
             this.lblFilterGender.Text = "Filter by gender:";
             // 
             // checkListProperties
@@ -102,7 +102,7 @@
             this.checkListProperties.Location = new System.Drawing.Point(185, 251);
             this.checkListProperties.Name = "checkListProperties";
             this.checkListProperties.Size = new System.Drawing.Size(161, 94);
-            this.checkListProperties.TabIndex = 7;
+            this.checkListProperties.TabIndex = 9;
             this.checkListProperties.SelectedIndexChanged += new System.EventHandler(this.checkListProperties_SelectedIndexChanged);
             // 
             // lblFilterProperty
@@ -111,7 +111,7 @@
             this.lblFilterProperty.Location = new System.Drawing.Point(182, 235);
             this.lblFilterProperty.Name = "lblFilterProperty";
             this.lblFilterProperty.Size = new System.Drawing.Size(95, 13);
-            this.lblFilterProperty.TabIndex = 6;
+            this.lblFilterProperty.TabIndex = 8;
             this.lblFilterProperty.Text = "Filter by properties:";
             // 
             // cmbCharactersList
@@ -120,7 +120,7 @@
             this.cmbCharactersList.Location = new System.Drawing.Point(182, 25);
             this.cmbCharactersList.Name = "cmbCharactersList";
             this.cmbCharactersList.Size = new System.Drawing.Size(164, 21);
-            this.cmbCharactersList.TabIndex = 9;
+            this.cmbCharactersList.TabIndex = 11;
             // 
             // lblCharacters
             // 
@@ -128,7 +128,7 @@
             this.lblCharacters.Location = new System.Drawing.Point(182, 9);
             this.lblCharacters.Name = "lblCharacters";
             this.lblCharacters.Size = new System.Drawing.Size(61, 13);
-            this.lblCharacters.TabIndex = 8;
+            this.lblCharacters.TabIndex = 10;
             this.lblCharacters.Text = "Characters:";
             // 
             // checkListElements
@@ -144,7 +144,7 @@
             this.checkListElements.Location = new System.Drawing.Point(15, 138);
             this.checkListElements.Name = "checkListElements";
             this.checkListElements.Size = new System.Drawing.Size(161, 94);
-            this.checkListElements.TabIndex = 5;
+            this.checkListElements.TabIndex = 3;
             this.checkListElements.SelectedIndexChanged += new System.EventHandler(this.checkListElements_SelectedIndexChanged);
             // 
             // lblFilterElement
@@ -153,7 +153,7 @@
             this.lblFilterElement.Location = new System.Drawing.Point(12, 122);
             this.lblFilterElement.Name = "lblFilterElement";
             this.lblFilterElement.Size = new System.Drawing.Size(86, 13);
-            this.lblFilterElement.TabIndex = 4;
+            this.lblFilterElement.TabIndex = 2;
             this.lblFilterElement.Text = "Filter by element:";
             // 
             // checkListRarity
@@ -167,7 +167,8 @@
             this.checkListRarity.Location = new System.Drawing.Point(185, 138);
             this.checkListRarity.Name = "checkListRarity";
             this.checkListRarity.Size = new System.Drawing.Size(161, 94);
-            this.checkListRarity.TabIndex = 11;
+            this.checkListRarity.TabIndex = 7;
+            this.checkListRarity.SelectedIndexChanged += new System.EventHandler(this.checkListRarity_SelectedIndexChanged);
             // 
             // lblFilterRarity
             // 
@@ -175,7 +176,7 @@
             this.lblFilterRarity.Location = new System.Drawing.Point(182, 122);
             this.lblFilterRarity.Name = "lblFilterRarity";
             this.lblFilterRarity.Size = new System.Drawing.Size(71, 13);
-            this.lblFilterRarity.TabIndex = 10;
+            this.lblFilterRarity.TabIndex = 6;
             this.lblFilterRarity.Text = "Filter by rarity:";
             // 
             // E7CharactersList
