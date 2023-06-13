@@ -38,6 +38,8 @@
             this.lblCharacters = new System.Windows.Forms.Label();
             this.checkListElements = new System.Windows.Forms.CheckedListBox();
             this.lblFilterElement = new System.Windows.Forms.Label();
+            this.checkListRarity = new System.Windows.Forms.CheckedListBox();
+            this.lblFilterRarity = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblFilterClass
@@ -73,7 +75,7 @@
             this.checkListGender.Items.AddRange(new object[] {
             "Female",
             "Male"});
-            this.checkListGender.Location = new System.Drawing.Point(15, 138);
+            this.checkListGender.Location = new System.Drawing.Point(15, 251);
             this.checkListGender.Name = "checkListGender";
             this.checkListGender.Size = new System.Drawing.Size(161, 94);
             this.checkListGender.TabIndex = 3;
@@ -82,7 +84,7 @@
             // lblFilterGender
             // 
             this.lblFilterGender.AutoSize = true;
-            this.lblFilterGender.Location = new System.Drawing.Point(12, 122);
+            this.lblFilterGender.Location = new System.Drawing.Point(12, 235);
             this.lblFilterGender.Name = "lblFilterGender";
             this.lblFilterGender.Size = new System.Drawing.Size(82, 13);
             this.lblFilterGender.TabIndex = 2;
@@ -139,7 +141,7 @@
             "Ice",
             "Light",
             "Dark"});
-            this.checkListElements.Location = new System.Drawing.Point(15, 251);
+            this.checkListElements.Location = new System.Drawing.Point(15, 138);
             this.checkListElements.Name = "checkListElements";
             this.checkListElements.Size = new System.Drawing.Size(161, 94);
             this.checkListElements.TabIndex = 5;
@@ -148,17 +150,41 @@
             // lblFilterElement
             // 
             this.lblFilterElement.AutoSize = true;
-            this.lblFilterElement.Location = new System.Drawing.Point(12, 235);
+            this.lblFilterElement.Location = new System.Drawing.Point(12, 122);
             this.lblFilterElement.Name = "lblFilterElement";
             this.lblFilterElement.Size = new System.Drawing.Size(86, 13);
             this.lblFilterElement.TabIndex = 4;
             this.lblFilterElement.Text = "Filter by element:";
+            // 
+            // checkListRarity
+            // 
+            this.checkListRarity.CheckOnClick = true;
+            this.checkListRarity.FormattingEnabled = true;
+            this.checkListRarity.Items.AddRange(new object[] {
+            "3 Stars",
+            "4 Stars",
+            "5 Stars"});
+            this.checkListRarity.Location = new System.Drawing.Point(185, 138);
+            this.checkListRarity.Name = "checkListRarity";
+            this.checkListRarity.Size = new System.Drawing.Size(161, 94);
+            this.checkListRarity.TabIndex = 11;
+            // 
+            // lblFilterRarity
+            // 
+            this.lblFilterRarity.AutoSize = true;
+            this.lblFilterRarity.Location = new System.Drawing.Point(182, 122);
+            this.lblFilterRarity.Name = "lblFilterRarity";
+            this.lblFilterRarity.Size = new System.Drawing.Size(71, 13);
+            this.lblFilterRarity.TabIndex = 10;
+            this.lblFilterRarity.Text = "Filter by rarity:";
             // 
             // E7CharactersList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(356, 354);
+            this.Controls.Add(this.checkListRarity);
+            this.Controls.Add(this.lblFilterRarity);
             this.Controls.Add(this.checkListElements);
             this.Controls.Add(this.lblFilterElement);
             this.Controls.Add(this.lblCharacters);
@@ -190,6 +216,8 @@
         private System.Windows.Forms.Label lblCharacters;
         private System.Windows.Forms.CheckedListBox checkListElements;
         private System.Windows.Forms.Label lblFilterElement;
+        private System.Windows.Forms.CheckedListBox checkListRarity;
+        private System.Windows.Forms.Label lblFilterRarity;
     }
 }
 

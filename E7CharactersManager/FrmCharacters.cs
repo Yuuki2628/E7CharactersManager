@@ -1,14 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace E7CharactersManager
 {
@@ -20,8 +12,9 @@ namespace E7CharactersManager
         public E7CharactersList()
         {
             InitializeComponent();
-            for (int i = 0; i < checkListElements.Items.Count; i++) checkListElements.SetItemChecked(i, true);
             for (int i = 0; i < checkListClass.Items.Count; i++) checkListClass.SetItemChecked(i, true);
+            for (int i = 0; i < checkListElements.Items.Count; i++) checkListElements.SetItemChecked(i, true);
+            for (int i = 0; i < checkListRarity.Items.Count; i++) checkListRarity.SetItemChecked(i, true);
             for (int i = 0; i < checkListGender.Items.Count; i++) checkListGender.SetItemChecked(i, true);
             for (int i = 0; i < checkListProperties.Items.Count; i++) checkListProperties.SetItemChecked(i, true);
 
@@ -31,32 +24,14 @@ namespace E7CharactersManager
         private void LoadFilteredList()
         {
             if (Initializing) return;
+
             cl = new CharactersList();
-            List<HeroElement> elList = new List<HeroElement>();
             List<HeroClass> clList = new List<HeroClass>();
+            List<HeroElement> elList = new List<HeroElement>();
+            List<HeroRarity> rrList = new List<HeroRarity>();
             List<HeroGender> gdList = new List<HeroGender>();
             List<Property> ppList = new List<Property>();
-            foreach (string check in checkListElements.CheckedItems)
-            {
-                switch (check)
-                {
-                    case "Fire":
-                        elList.Add(HeroElement.Fire);
-                        break;
-                    case "Earth":
-                        elList.Add(HeroElement.Earth);
-                        break;
-                    case "Ice":
-                        elList.Add(HeroElement.Ice);
-                        break;
-                    case "Light":
-                        elList.Add(HeroElement.Light);
-                        break;
-                    case "Dark":
-                        elList.Add(HeroElement.Dark);
-                        break;
-                    }
-            }
+
             foreach (string check in checkListClass.CheckedItems)
             {
                 switch (check)
@@ -78,6 +53,42 @@ namespace E7CharactersManager
                         break;
                     case "SoulWeaver":
                         clList.Add(HeroClass.SoulWeaver);
+                        break;
+                }
+            }
+            foreach (string check in checkListElements.CheckedItems)
+            {
+                switch (check)
+                {
+                    case "Fire":
+                        elList.Add(HeroElement.Fire);
+                        break;
+                    case "Earth":
+                        elList.Add(HeroElement.Earth);
+                        break;
+                    case "Ice":
+                        elList.Add(HeroElement.Ice);
+                        break;
+                    case "Light":
+                        elList.Add(HeroElement.Light);
+                        break;
+                    case "Dark":
+                        elList.Add(HeroElement.Dark);
+                        break;
+                    }
+            }
+            foreach (string check in checkListRarity.CheckedItems)
+            {
+                switch (check)
+                {
+                    case "3 Stars":
+                        rrList.Add(HeroRarity.Stars3);
+                        break;
+                    case "4 Stars":
+                        rrList.Add(HeroRarity.Stars4);
+                        break;
+                    case "5 Stars":
+                        rrList.Add(HeroRarity.Stars5);
                         break;
                 }
             }
@@ -112,12 +123,6 @@ namespace E7CharactersManager
                 }
             }
 
-            if (!elList.Contains(HeroElement.Fire))          cl.FilterList(FilterType.RemoveAllFire);
-            if (!elList.Contains(HeroElement.Earth))         cl.FilterList(FilterType.RemoveAllEarth);
-            if (!elList.Contains(HeroElement.Ice))           cl.FilterList(FilterType.RemoveAllIce);
-            if (!elList.Contains(HeroElement.Light))         cl.FilterList(FilterType.RemoveAllLight);
-            if (!elList.Contains(HeroElement.Dark))          cl.FilterList(FilterType.RemoveAllDark);
-                                                             
             if (!clList.Contains(HeroClass.DummyClass))      cl.FilterList(FilterType.RemoveAllDummyClass);
             if (!clList.Contains(HeroClass.Warrior))         cl.FilterList(FilterType.RemoveAllWarrior);
             if (!clList.Contains(HeroClass.Knight))          cl.FilterList(FilterType.RemoveAllKnight);
@@ -125,7 +130,17 @@ namespace E7CharactersManager
             if (!clList.Contains(HeroClass.Mage))            cl.FilterList(FilterType.RemoveAllMage);
             if (!clList.Contains(HeroClass.Ranger))          cl.FilterList(FilterType.RemoveAllRanger);
             if (!clList.Contains(HeroClass.SoulWeaver))      cl.FilterList(FilterType.RemoveAllSoulWeaver);
-                                                             
+
+            if (!elList.Contains(HeroElement.Fire))          cl.FilterList(FilterType.RemoveAllFire);
+            if (!elList.Contains(HeroElement.Earth))         cl.FilterList(FilterType.RemoveAllEarth);
+            if (!elList.Contains(HeroElement.Ice))           cl.FilterList(FilterType.RemoveAllIce);
+            if (!elList.Contains(HeroElement.Light))         cl.FilterList(FilterType.RemoveAllLight);
+            if (!elList.Contains(HeroElement.Dark))          cl.FilterList(FilterType.RemoveAllDark);
+
+            if (!rrList.Contains(HeroRarity.Stars3))         cl.FilterList(FilterType.RemoveAllStars3);
+            if (!rrList.Contains(HeroRarity.Stars4))         cl.FilterList(FilterType.RemoveAllStars4);
+            if (!rrList.Contains(HeroRarity.Stars5))         cl.FilterList(FilterType.RemoveAllStars5);
+
             if (!gdList.Contains(HeroGender.Male))           cl.FilterList(FilterType.RemoveAllMales);
             if (!gdList.Contains(HeroGender.Female))         cl.FilterList(FilterType.RemoveAllFemales);
             
