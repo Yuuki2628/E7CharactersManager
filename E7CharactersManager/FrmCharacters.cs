@@ -6,7 +6,7 @@ namespace E7CharactersManager
 {
     public partial class E7CharactersList : Form
     {
-        private CharactersList cl { get; set; }
+        private CharactersList CharactersList { get; set; }
         private bool Initializing { get; set; } = true;
 
         public E7CharactersList()
@@ -25,7 +25,7 @@ namespace E7CharactersManager
         {
             if (Initializing) return;
 
-            cl = new CharactersList();
+            CharactersList = new CharactersList();
             List<HeroClass> clList = new List<HeroClass>();
             List<HeroElement> elList = new List<HeroElement>();
             List<HeroRarity> rrList = new List<HeroRarity>();
@@ -123,34 +123,34 @@ namespace E7CharactersManager
                 }
             }
 
-            if (!clList.Contains(HeroClass.DummyClass))      cl.FilterList(FilterType.RemoveAllDummyClass);
-            if (!clList.Contains(HeroClass.Warrior))         cl.FilterList(FilterType.RemoveAllWarrior);
-            if (!clList.Contains(HeroClass.Knight))          cl.FilterList(FilterType.RemoveAllKnight);
-            if (!clList.Contains(HeroClass.Thief))           cl.FilterList(FilterType.RemoveAllThief);
-            if (!clList.Contains(HeroClass.Mage))            cl.FilterList(FilterType.RemoveAllMage);
-            if (!clList.Contains(HeroClass.Ranger))          cl.FilterList(FilterType.RemoveAllRanger);
-            if (!clList.Contains(HeroClass.SoulWeaver))      cl.FilterList(FilterType.RemoveAllSoulWeaver);
+            if (!clList.Contains(HeroClass.DummyClass))      CharactersList.FilterList(FilterType.ByClass.RemoveAllDummyClass);
+            if (!clList.Contains(HeroClass.Warrior))         CharactersList.FilterList(FilterType.ByClass.RemoveAllWarrior);
+            if (!clList.Contains(HeroClass.Knight))          CharactersList.FilterList(FilterType.ByClass.RemoveAllKnight);
+            if (!clList.Contains(HeroClass.Thief))           CharactersList.FilterList(FilterType.ByClass.RemoveAllThief);
+            if (!clList.Contains(HeroClass.Mage))            CharactersList.FilterList(FilterType.ByClass.RemoveAllMage);
+            if (!clList.Contains(HeroClass.Ranger))          CharactersList.FilterList(FilterType.ByClass.RemoveAllRanger);
+            if (!clList.Contains(HeroClass.SoulWeaver))      CharactersList.FilterList(FilterType.ByClass.RemoveAllSoulWeaver);
 
-            if (!elList.Contains(HeroElement.Fire))          cl.FilterList(FilterType.RemoveAllFire);
-            if (!elList.Contains(HeroElement.Earth))         cl.FilterList(FilterType.RemoveAllEarth);
-            if (!elList.Contains(HeroElement.Ice))           cl.FilterList(FilterType.RemoveAllIce);
-            if (!elList.Contains(HeroElement.Light))         cl.FilterList(FilterType.RemoveAllLight);
-            if (!elList.Contains(HeroElement.Dark))          cl.FilterList(FilterType.RemoveAllDark);
+            if (!elList.Contains(HeroElement.Fire))          CharactersList.FilterList(FilterType.ByElement.RemoveAllFire);
+            if (!elList.Contains(HeroElement.Earth))         CharactersList.FilterList(FilterType.ByElement.RemoveAllEarth);
+            if (!elList.Contains(HeroElement.Ice))           CharactersList.FilterList(FilterType.ByElement.RemoveAllIce);
+            if (!elList.Contains(HeroElement.Light))         CharactersList.FilterList(FilterType.ByElement.RemoveAllLight);
+            if (!elList.Contains(HeroElement.Dark))          CharactersList.FilterList(FilterType.ByElement.RemoveAllDark);
 
-            if (!rrList.Contains(HeroRarity.Stars3))         cl.FilterList(FilterType.RemoveAllStars3);
-            if (!rrList.Contains(HeroRarity.Stars4))         cl.FilterList(FilterType.RemoveAllStars4);
-            if (!rrList.Contains(HeroRarity.Stars5))         cl.FilterList(FilterType.RemoveAllStars5);
+            if (!rrList.Contains(HeroRarity.Stars3))         CharactersList.FilterList(FilterType.ByRarity.RemoveAllStars3);
+            if (!rrList.Contains(HeroRarity.Stars4))         CharactersList.FilterList(FilterType.ByRarity.RemoveAllStars4);
+            if (!rrList.Contains(HeroRarity.Stars5))         CharactersList.FilterList(FilterType.ByRarity.RemoveAllStars5);
 
-            if (!gdList.Contains(HeroGender.Male))           cl.FilterList(FilterType.RemoveAllMales);
-            if (!gdList.Contains(HeroGender.Female))         cl.FilterList(FilterType.RemoveAllFemales);
+            if (!gdList.Contains(HeroGender.Male))           CharactersList.FilterList(FilterType.ByGender.RemoveAllMales);
+            if (!gdList.Contains(HeroGender.Female))         CharactersList.FilterList(FilterType.ByGender.RemoveAllFemales);
             
-            if (!ppList.Contains(Property.ClothesChange))    cl.FilterList(FilterType.RemoveAllClothesChange);
-            if (!ppList.Contains(Property.Skin))             cl.FilterList(FilterType.RemoveAllSkin);
-            if (!ppList.Contains(Property.SpecialtyChange))  cl.FilterList(FilterType.RemoveAllSpecialtyChange);
-            if (!ppList.Contains(Property.Collab))           cl.FilterList(FilterType.RemoveAllCollab);
+            if (!ppList.Contains(Property.ClothesChange))    CharactersList.FilterList(FilterType.ByProperty.RemoveAllClothesChange);
+            if (!ppList.Contains(Property.Skin))             CharactersList.FilterList(FilterType.ByProperty.RemoveAllSkin);
+            if (!ppList.Contains(Property.SpecialtyChange))  CharactersList.FilterList(FilterType.ByProperty.RemoveAllSpecialtyChange);
+            if (!ppList.Contains(Property.Collab))           CharactersList.FilterList(FilterType.ByProperty.RemoveAllCollab);
         
             cmbCharactersList.Items.Clear();
-            foreach (Character character in cl.List) cmbCharactersList.Items.Add(character.name);
+            foreach (Character character in CharactersList.List) cmbCharactersList.Items.Add(character);
         }
 
         private void E7CharactersList_Load(object sender, EventArgs e) => LoadFilteredList();
@@ -159,5 +159,26 @@ namespace E7CharactersManager
         private void checkListRarity_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
         private void checkListGender_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
         private void checkListProperties_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
+
+        private void btnEpic7x_Click(object sender, EventArgs e)
+        {
+            if(CharactersList.List.Count == 0) return;
+            if (cmbCharactersList.SelectedItem == null) return;
+
+            Character character = cmbCharactersList.SelectedItem as Character;
+            if (character.Properties.Contains(Property.Skin) || character.Properties.Contains(Property.SpecialtyChange))
+                CharactersList.OpenNewTab("https://epic7x.com/character/" + character.SkinOf.Name.ToLower().Replace(" ", "-") + "/");
+            else
+                CharactersList.OpenNewTab("https://epic7x.com/character/" + character.Name.ToLower().Replace(" ", "-") + "/");
+        }
+
+        private void btnE7Vault_Click(object sender, EventArgs e)
+        {
+            if (CharactersList.List.Count == 0) return;
+            if (cmbCharactersList.SelectedItem == null) return;
+
+            Character character = cmbCharactersList.SelectedItem as Character;
+            CharactersList.OpenNewTab("https://www.e7vau.lt/portrait-viewer.html?id=" + character.CID);
+        }
     }
 }

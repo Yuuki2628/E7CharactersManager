@@ -40,6 +40,8 @@
             this.lblFilterElement = new System.Windows.Forms.Label();
             this.checkListRarity = new System.Windows.Forms.CheckedListBox();
             this.lblFilterRarity = new System.Windows.Forms.Label();
+            this.btnEpic7x = new System.Windows.Forms.Button();
+            this.btnE7Vault = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblFilterClass
@@ -179,11 +181,33 @@
             this.lblFilterRarity.TabIndex = 6;
             this.lblFilterRarity.Text = "Filter by rarity:";
             // 
+            // btnEpic7x
+            // 
+            this.btnEpic7x.Location = new System.Drawing.Point(182, 52);
+            this.btnEpic7x.Name = "btnEpic7x";
+            this.btnEpic7x.Size = new System.Drawing.Size(81, 23);
+            this.btnEpic7x.TabIndex = 12;
+            this.btnEpic7x.Text = "Epic7x";
+            this.btnEpic7x.UseVisualStyleBackColor = true;
+            this.btnEpic7x.Click += new System.EventHandler(this.btnEpic7x_Click);
+            // 
+            // btnE7Vault
+            // 
+            this.btnE7Vault.Location = new System.Drawing.Point(265, 52);
+            this.btnE7Vault.Name = "btnE7Vault";
+            this.btnE7Vault.Size = new System.Drawing.Size(81, 23);
+            this.btnE7Vault.TabIndex = 13;
+            this.btnE7Vault.Text = "e7vau.lt";
+            this.btnE7Vault.UseVisualStyleBackColor = true;
+            this.btnE7Vault.Click += new System.EventHandler(this.btnE7Vault_Click);
+            // 
             // E7CharactersList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(356, 354);
+            this.Controls.Add(this.btnE7Vault);
+            this.Controls.Add(this.btnEpic7x);
             this.Controls.Add(this.checkListRarity);
             this.Controls.Add(this.lblFilterRarity);
             this.Controls.Add(this.checkListElements);
@@ -219,6 +243,8 @@
         private System.Windows.Forms.Label lblFilterElement;
         private System.Windows.Forms.CheckedListBox checkListRarity;
         private System.Windows.Forms.Label lblFilterRarity;
+        private System.Windows.Forms.Button btnEpic7x;
+        private System.Windows.Forms.Button btnE7Vault;
     }
 }
 

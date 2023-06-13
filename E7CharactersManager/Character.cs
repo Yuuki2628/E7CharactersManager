@@ -13,50 +13,72 @@ namespace E7CharactersManager
         /// <summary>
         /// Character name
         /// </summary>
-        public string name { get; private set; } = "";
+        public string Name { get; private set; } = "";
         /// <summary>
         /// Character unique ID
         /// </summary>
-        public string cid { get; private set; } = "";
+        public string CID { get; private set; } = "";
         /// <summary>
         /// Element of the Hero
         /// </summary>
-        public HeroElement heroElement { get; private set; }
+        public HeroElement HeroElement { get; private set; }
         /// <summary>
         /// Class of the Hero
         /// </summary>
-        public HeroClass heroClass { get; private set; }
+        public HeroClass HeroClass { get; private set; }
         /// <summary>
         /// Rarity of the Hero
         /// </summary>
-        public HeroRarity heroRarity { get; private set; }
+        public HeroRarity HeroRarity { get; private set; }
         /// <summary>
         /// Gender of the Hero
         /// </summary>
-        public HeroGender heroGender { get; private set; }
+        public HeroGender HeroGender { get; private set; }
+        /// <summary>
+        /// If the character is a skin, indicates whose skin it is
+        /// </summary>
+        public Character SkinOf { get; private set; }
         /// <summary>
         /// Additional properties a Hero can have
         /// </summary>
-        public List<Property> properties { get; private set; } = new List<Property>();
-
+        public List<Property> Properties { get; private set; } = new List<Property>();
         /// <summary>
         /// Create a new character object from the information given
         /// </summary>
         /// <param name="name">Name of the Hero</param>
         /// <param name="cid">Unique ID of the Hero</param>
-        /// <param name="heroGender">Gender of the Hero</param>
+        /// <param name="heroElement">Element of the Hero</param>
+        /// <param name="heroRarity">Rariry of the Hero</param>
         /// <param name="heroClass">Class of the Hero</param>
+        /// <param name="heroGender">Gender of the Hero</param>
+        /// <param name="relatedHero">Skin of the Hero or Hero whose specialty change is this Hero</param>
         /// <param name="properties">Addidional properties a Hero can have</param>
-        public Character(string name, string cid, HeroElement heroElement, HeroRarity heroRarity, HeroClass heroClass, HeroGender heroGender, params Property[] properties)
+        public Character(string name, string cid, HeroElement heroElement, HeroRarity heroRarity, HeroClass heroClass, HeroGender heroGender, Character relatedHero , params Property[] properties)
         {
-            this.name = name;
-            this.cid = cid;
-            this.heroElement = heroElement;
-            this.heroRarity = heroRarity;
-            this.heroClass = heroClass;
-            this.heroGender = heroGender;
+            this.Name = name;
+            this.CID = cid;
+            this.HeroElement = heroElement;
+            this.HeroRarity = heroRarity;
+            this.HeroClass = heroClass;
+            this.SkinOf = relatedHero;
+            this.HeroGender = heroGender;
             foreach (Property p in properties)
-                this.properties.Add(p);
+                this.Properties.Add(p);
+        }
+        /// <summary>
+        /// Create a new character object from the information given
+        /// </summary>
+        /// <param name="name">Name of the Hero</param>
+        /// <param name="cid">Unique ID of the Hero</param>
+        /// <param name="heroElement">Element of the Hero</param>
+        /// <param name="heroRarity">Rariry of the Hero</param>
+        /// <param name="heroClass">Class of the Hero</param>
+        /// <param name="heroGender">Gender of the Hero</param>
+        /// <param name="properties">Addidional properties a Hero can have</param>
+        public Character(string name, string cid, HeroElement heroElement, HeroRarity heroRarity, HeroClass heroClass, HeroGender heroGender, params Property[] properties) : this (name, cid, heroElement, heroRarity, heroClass, heroGender, null, properties){ }
+        public override string ToString()
+        {
+            return Name;
         }
     }
 
@@ -114,61 +136,85 @@ namespace E7CharactersManager
     /// <summary>
     /// Type of filter to apply on List
     /// </summary>
-    public enum FilterType
+    public struct FilterType
     {
-        OnlyFire,
-        OnlyEarth,
-        OnlyIce,
-        OnlyLight,
-        OnlyDark,
+        /// <summary>
+        /// Filter by Hero element
+        /// </summary>
+        public enum ByElement
+        {
+            OnlyFire,
+            OnlyEarth,
+            OnlyIce,
+            OnlyLight,
+            OnlyDark,
 
-        RemoveAllFire,
-        RemoveAllEarth,
-        RemoveAllIce,
-        RemoveAllLight,
-        RemoveAllDark,
+            RemoveAllFire,
+            RemoveAllEarth,
+            RemoveAllIce,
+            RemoveAllLight,
+            RemoveAllDark
+        }
+        /// <summary>
+        /// Filter by Hero class
+        /// </summary>
+        public enum ByClass
+        {
+            OnlyDummyClass,
+            OnlyWarrior,
+            OnlyKnight,
+            OnlyThief,
+            OnlyMage,
+            OnlyRanger,
+            OnlySoulWeaver,
 
-        OnlyDummyClass,
-        OnlyWarrior,
-        OnlyKnight,
-        OnlyThief,
-        OnlyMage,
-        OnlyRanger,
-        OnlySoulWeaver,
+            RemoveAllDummyClass,
+            RemoveAllWarrior,
+            RemoveAllKnight,
+            RemoveAllThief,
+            RemoveAllMage,
+            RemoveAllRanger,
+            RemoveAllSoulWeaver
+        }
+        /// <summary>
+        /// Filter by Hero rarity
+        /// </summary>
+        public enum ByRarity
+        {
+            OnlyStars3,
+            OnlyStars4,
+            OnlyStars5,
 
-        RemoveAllDummyClass,
-        RemoveAllWarrior,
-        RemoveAllKnight,
-        RemoveAllThief,
-        RemoveAllMage,
-        RemoveAllRanger,
-        RemoveAllSoulWeaver,
+            RemoveAllStars3,
+            RemoveAllStars4,
+            RemoveAllStars5
+        }
+        /// <summary>
+        /// Filter by Hero gender
+        /// </summary>
+        public enum ByGender
+        {
+            OnlyMales,
+            OnlyFemales,
 
+            RemoveAllMales,
+            RemoveAllFemales
+        }
+        /// <summary>
+        /// Filter by Hero extra properties
+        /// </summary>
+        public enum ByProperty
+        {
+            OnlyClothesChange,
+            OnlySpecialtyChange,
+            OnlyCollab,
+            OnlySkin,
 
-        OnlyStars3,
-        OnlyStars4,
-        OnlyStars5,
-
-        RemoveAllStars3,
-        RemoveAllStars4,
-        RemoveAllStars5,
-
-
-        OnlyMales,
-        OnlyFemales,
-
-        RemoveAllMales,
-        RemoveAllFemales,
-
-        OnlyClothesChange,
-        OnlySpecialtyChange,
-        OnlyCollab,
-        OnlySkin,
-
-        RemoveAllClothesChange,
-        RemoveAllSpecialtyChange,
-        RemoveAllCollab,
-        RemoveAllSkin
+            RemoveAllClothesChange,
+            RemoveAllSpecialtyChange,
+            RemoveAllCollab,
+            RemoveAllSkin
+        }
     }
 
     internal class CharactersList
@@ -176,576 +222,455 @@ namespace E7CharactersManager
         /// <summary>
         /// List containing all characters by default. Can be modified by applying filters
         /// </summary>
-        public List<Character> List { get; private set; } = new List<Character>
+        public List<Character> List { get; private set; } = new List<Character>();
+
+        public CharactersList()
         {
-            //            Character Name,                             Character ID, Character Element, HeroRarity,        HeroClass,          , Character Gender,  Hero Properties
-            new Character("Abigail",                                  "c1144",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Achates",                                  "c1017",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Achates: Azure Sea",                       "c1017_s01",  HeroElement.Fire,  HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female, Property.Skin),
-            new Character("Adin",                                     "c3143",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female),
-            new Character("Adlay",                                    "c3043",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Adventurer Ras",                           "c5001",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Ainos",                                    "c3105",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Ainos 2.0",                                "c4105",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Ains",                                     "c3093",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Aither",                                   "c1018",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Male  ),
-            new Character("Aither: Star of Ezera",                    "c1018_s01",  HeroElement.Ice,   HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Male,   Property.Skin),
-            new Character("Alencia",                                  "c1100",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Alencia: Gift Granny",                     "c1100_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, Property.Skin),
-            new Character("Alexa",                                    "c3012",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female),
-            new Character("All-Rounder Wanda",                        "c4065",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Ambitious Tywin",                          "c2042",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Amid",                                     "c1143",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Angel of Light Angelica",                  "c6062",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female),
-            new Character("Angelic Montmorancy",                      "c4042",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Angelic Montmorancy: Serene Sea",          "c4042_s01",  HeroElement.Ice,   HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female, Property.Skin),
-            new Character("Angelica",                                 "c1062",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Angelica: Mysterious Transfer Student",    "c1062_s01",  HeroElement.Ice,   HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female, Property.Skin),
-            new Character("Apocalypse Ravi",                          "c2019",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Apocalypse Ravi: Avatar of Bloodlust",     "c2019_s01",  HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, Property.Skin),
-            new Character("Aramintha",                                "c1048",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Arbiter Vildred",                          "c2007",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Arbiter Vildred: Dark Monarch",            "c2007_s01",  HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male,   Property.Skin),
-            new Character("Archdemon's Shadow",                       "c5004",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Architect Laika",                          "c2099",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Aria",                                     "c1129",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Armin",                                    "c1008",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female),
-            new Character("Arowell",                                  "c3004",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female),
-            new Character("Arunka",                                   "c1124",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Assassin Cartuja",                         "c2013",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Assassin Cidd",                            "c2014",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Assassin Coli",                            "c2033",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female),
-            new Character("Astromancer Elena",                        "c2091",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Auxiliary Lots",                           "c2031",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Azalea",                                   "c3031",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Baal & Sezan",                             "c1015",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Bad Cat Armin",                            "c6008",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Baiken",                                   "c1093",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female, Property.Collab),
-            new Character("Basar",                                    "c1053",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Basar: Sophisticated Magnate",             "c1053_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male,   Property.Skin),
-            new Character("Bask",                                     "c3006",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Batisse",                                  "c3095",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Beehoo",                                   "c1141",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Male  ),
-            new Character("Belian",                                   "c1117",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female),
-            new Character("Bellona",                                  "c1071",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Benevolent Romann",                        "c2043",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Benimaru",                                 "c1146",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male,   Property.Collab),
-            new Character("Blaze Dingo",                              "c2021",      HeroElement.Light, HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Male  ),
-            new Character("Blood Blade Karin",                        "c2011",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female),
-            new Character("Blood Moon Haste",                         "c2039",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Male  ),
-            new Character("Bomb Model Kanna",                         "c1097",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Bomb Model Kanna: Special Gift",           "c1097_s01",  HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, Property.Skin),
-            new Character("Briar Witch Iseria",                       "c2024",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Butcher Corps Inquisitor",                 "c3001",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Camilla",                                  "c3124",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Captain Rikoris",                          "c4034",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Carmainerose",                             "c3071",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female),
-            new Character("Carrot",                                   "c3051",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female),
-            new Character("Cartuja",                                  "c1013",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Cecilia",                                  "c1002",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female),
-            new Character("Cecilia: Black-Winged Succubus",           "c1002_s01",  HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female, Property.Skin),
-            new Character("Celeste",                                  "c3064",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Celestial Mercedes",                       "c2005",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female),
-            new Character("Celine",                                   "c1103",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female),
-            new Character("Cerise",                                   "c1081",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Cermia",                                   "c1079",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Cermia: Beachside Merrymakes",             "c1079_s01",  HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, Property.Skin),
-            new Character("Challenger Dominiel",                      "c2037",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female),
-            new Character("Champion Zerato",                          "c2010",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Chaos Inquisitor",                         "c4001",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Chaos Sect Axe",                           "c4025",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Charles",                                  "c1027",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Charles: Demon Hunter",                    "c1027_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male,   Property.Skin),
-            new Character("Charlotte",                                "c1009",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female),
-            new Character("Chloe",                                    "c1049",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Choux",                                    "c1101",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Choux: 2022 E7WC",                         "c1101_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, Property.Skin),
-            new Character("Christy",                                  "c3123",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female),
-            new Character("Church of Ilryos Axe",                     "c3025",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Cidd",                                     "c1014",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Cidd: Masked Gentleman",                   "c1014_s01",  HeroElement.Earth, HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Male,   Property.Skin),
-            new Character("Clarissa",                                 "c1028",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Closer Charles",                           "c2027",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Coli",                                     "c1033",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female),
-            new Character("Command Model Laika",                      "c1099",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Commander Lorina",                         "c4035",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Commander Pavel",                          "c2080",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Male  ),
-            new Character("Conqueror Lilias",                         "c2089",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Corvus",                                   "c1012",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Crescent Moon Rin",                        "c2054",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female),
-            new Character("Crimson Armin",                            "c2008",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female),
-            new Character("Crozet",                                   "c1036",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Dark Corvus",                              "c2012",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Death Dealer Ray",                         "c2090",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Male  ),
-            new Character("Desert Jewel Basar",                       "c2053",      HeroElement.Light, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Male  ),
-            new Character("Designer Lilibet",                         "c2095",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Destina",                                  "c2022",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Destina: Spring Breeze",                   "c2022_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, Property.Skin),
-            new Character("Diene",                                    "c1076",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Diene: Magical Girl",                      "c1076_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, Property.Skin),
-            new Character("Dingo",                                    "c1021",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Dizzy",                                    "c1094",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, Property.Collab),
-            new Character("Doll Maker Pearlhorizon",                  "c4073",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female),
-            new Character("Dominiel",                                 "c1037",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female),
-            new Character("Doris",                                    "c3044",      HeroElement.Light, HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Eaton",                                    "c3094",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Eda",                                      "c1111",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Edward Elric",                             "c1134",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male,   Property.Collab),
-            new Character("Elena",                                    "c1091",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Elena: Starlit Melody",                    "c1091_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, Property.Skin),
-            new Character("Eligos",                                   "c1142",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Male  ),
-            new Character("Elphelt",                                  "c1105",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, Property.Collab),
-            new Character("Elson",                                    "c3054",      HeroElement.Light, HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Male  ),
-            new Character("Emilia",                                   "c1116",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, Property.Collab),
-            new Character("Enott",                                    "c3022",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Ervalen",                                  "c1108",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Fairytale Tenebria",                       "c5050",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Faithless Lidica",                         "c2046",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Faithless Lidica: Victorious Knight",      "c2046_s01",  HeroElement.Light, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, Property.Skin),
-            new Character("Falconer Kluri",                           "c4003",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female),
-            new Character("Fallen Cecilia",                           "c2002",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female),
-            new Character("Fallen Cecilia: White Warmth",             "c2002_s01",  HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female, Property.Skin),
-            new Character("Fighter Maya",                             "c2032",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female),
-            new Character("Flan",                                     "c1110",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Free Spirit Tieria",                       "c3026",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Female),
-          //new Character("Free Spirit Tieria",                       "c3026_s01",  HeroElement.Light, HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Female, Property.Skin), TODO skin unknown
-            new Character("Furious",                                  "c1087",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Male  ),
-            new Character("General Purrgis",                          "c2035",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Glenn",                                    "c3103",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Male  ),
-            new Character("Gloomyrain",                               "c3074",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female),
-            new Character("Godmother",                                "c3101",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Great Chief Khawana",                      "c2086",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Guider Aither",                            "c2018",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Gunther",                                  "c3024",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Hasol",                                    "c3135",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female),
-            new Character("Haste",                                    "c1039",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Hataan",                                   "c3091",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Hazel",                                    "c3041",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Helen",                                    "c3122",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female),
-            new Character("Helga",                                    "c3023",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Holiday Yufine",                           "c5016",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Holy Flame Adin",                          "c4141",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female),
-            new Character("Hurado",                                   "c3055",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Hwayoung",                                 "c1128",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Ian",                                      "c3102",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Male  ),
-            new Character("Ilynav",                                   "c1113",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female),
-            new Character("Inferno Khawazu",                          "c2085",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Iseria",                                   "c1024",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Iseria: Night of White Flowers",           "c1024_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, Property.Skin),
-            new Character("Jack O’",                                  "c1130",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, Property.Collab),
-            new Character("Januta",                                   "c3131",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Jecht",                                    "c3053",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Male  ),
-            new Character("Jena",                                     "c3052",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female),
-            new Character("Judge Kise",                               "c2006",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Judge Kise: Heir of Holy Light",           "c2006_s01",  HeroElement.Light, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, Property.Skin),
-            new Character("Judith",                                   "c3011",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female),
-            new Character("Juni",                                     "c3151",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Karin",                                    "c1011",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female),
-            new Character("Karin: Shore Patrol",                      "c1011_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female, Property.Skin),
-            new Character("Kawerik",                                  "c1073",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Kayron",                                   "c1023",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Kayron: Time Rabbit",                      "c1023_s01",  HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male,   Property.Skin),
-            new Character("Ken",                                      "c1047",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Khawana",                                  "c1086",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female),
-            new Character("Khawazu",                                  "c1085",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Kikirat v2",                               "c3084",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Kiris",                                    "c3063",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Kise",                                     "c1006",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female),
-            new Character("Kitty Clarissa",                           "c2028",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Kizuna AI",                                "c1107",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female, Property.Collab),
-            new Character("Kluri",                                    "c3003",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female),
-            new Character("Krau",                                     "c1070",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Landy",                                    "c1109",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Last Piece Karin",                         "c6011",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female),
-            new Character("Last Rider Krau",                          "c2070",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Lena",                                     "c3092",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Leo",                                      "c1029",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Male  ),
-            new Character("Lidica",                                   "c1046",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Lidica: Bride of Roses",                   "c1046_s01",  HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, Property.Skin),
-            new Character("Lilias",                                   "c1089",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female),
-            new Character("Lilibet",                                  "c1095",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Lilka",                                    "c3153",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Lionheart Cermia",                         "c2079",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Little Queen Charlotte",                   "c2009",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Little Queen Charlotte: Elegant Excurion", "c2009_s01",  HeroElement.Light, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, Property.Skin),
-            new Character("Lone Crescent Bellona",                    "c2071",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Lorina",                                   "c3035",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Lots",                                     "c1031",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Male  ),
-            new Character("Lua",                                      "c1126",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Lucy",                                     "c3113",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Ludwig",                                   "c1069",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Luluca",                                   "c1082",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Luluca: Lovely Patissiere",                "c1082_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, Property.Skin),
-            new Character("Luna",                                     "c1066",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Magic Scholar Doris",                      "c4044",      HeroElement.Light, HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Maid Chloe",                               "c2049",      HeroElement.Light, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Maid Chloe: Energetic",                    "c2049_s01",  HeroElement.Light, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, Property.Skin),
-            new Character("Martial Artist Ken",                       "c2047",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Mascot Hazel",                             "c4041",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Maya",                                     "c1032",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female),
-            new Character("Mediator Kawerik",                         "c2073",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Mediator Kawerik: Calamity's Equilibrium", "c2073_s01",  HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male,   Property.Skin),
-            new Character("Melany",                                   "c3121",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Melissa",                                  "c1096",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Mercedes",                                 "c0002",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female),
-          //new Character("Mercedes",                                 "c1005",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female), before power up
-            new Character("Mercedes: Fluffy Lady",                    "c1005_s01",  HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female, Property.Skin),
-            new Character("Mercenary Helga",                          "c4023",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Milim",                                    "c1122",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, Property.Collab),
-            new Character("Mirsa",                                    "c3014",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female),
-            new Character("Mistychain",                               "c3072",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female),
-            new Character("Montmorancy",                              "c3042",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Moon Bunny Dominiel",                      "c6037",      HeroElement.Light, HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Mort",                                     "c1104",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Mucacha",                                  "c3033",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Mui",                                      "c1044",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Muse Rima",                                "c4062",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Muwi",                                     "c3132",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Nemunas",                                  "c3061",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Operator Sigret",                          "c2072",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Orte",                                     "c3133",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female),
-            new Character("Otillie",                                  "c3045",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female),
-            new Character("Pavel",                                    "c1080",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Male  ),
-            new Character("Peacemaker Furious",                       "c2087",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Male  ),
-            new Character("Pearlhorizon",                             "c3073",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female),
-            new Character("Peira",                                    "c1125",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female),
-            new Character("Penelope",                                 "c3125",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female),
-            new Character("Pirate Captain Flan",                      "c2110",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Politis",                                  "c1112",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Purrgis",                                  "c1035",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Pyllis",                                   "c3005",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female),
-            new Character("Ram",                                      "c1115",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, Property.Collab),
-            new Character("Ran",                                      "c1118",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Ran: Pure White Heart",                    "c1118_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male,   Property.Skin),
-            new Character("Ras",                                      "c1001",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Vagabond Ras",                             "c1078",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Ravi",                                     "c1019",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Ray",                                      "c1090",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Male  ),
-            new Character("Rem",                                      "c1114",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, Property.Collab),
-            new Character("Remnant Violet",                           "c2074",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Requiem Roana",                            "c2102",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Requiemroar",                              "c3075",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Researcher Carrot",                        "c4051",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female),
-            new Character("Righteous Thief Roozid",                   "c4013",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Rikoris",                                  "c3034",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Rima",                                     "c3062",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Rimuru",                                   "c1121",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male,   Property.Collab),
-            new Character("Rin",                                      "c1054",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Riza Hawkeye",                             "c1136",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, Property.Collab),
-            new Character("Roaming Warrior Leo",                      "c2029",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Male  ),
-            new Character("Roana",                                    "c1102",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Romann",                                   "c1043",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Roozid",                                   "c3013",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Rose",                                     "c1003",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female),
-            new Character("Rose: Dark Angel",                         "c1003_s01",  HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female, Property.Skin),
-            new Character("Roy Mustang",                              "c1135",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male,   Property.Collab),
-            new Character("Ruele of Light",                           "c1022",      HeroElement.Light, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Ruele of Light: Heir of Radiance",         "c1022_s01",  HeroElement.Light, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, Property.Skin),
-            new Character("Sage Baal & Sezan",                        "c2015",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Savior Adin",                              "c4144",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female),
-            new Character("Schuri",                                   "c1020",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Male  ),
-            new Character("Seaside Bellona",                          "c5071",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Senya",                                    "c1106",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female),
-            new Character("Serene Purity Adin",                       "c4142",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female),
-            new Character("Serila",                                   "c1040",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female),
-            new Character("Sez",                                      "c1038",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Sez: Aloof Lifeguard",                     "c1038_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male,   Property.Skin),
-            new Character("Shadow Knight Pyllis",                     "c4005",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female),
-            new Character("Shadow Rose",                              "c2003",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female),
-            new Character("Sharun",                                   "c1132",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Shepherd Jena",                            "c4052",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female),
-            new Character("Shooting Star Achates",                    "c2017",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Shuna",                                    "c1123",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, Property.Collab),
-            new Character("Sigret",                                   "c1072",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Silk",                                     "c1004",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Silver Blade Aramintha",                   "c2048",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Sinful Angelica",                          "c2062",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Sol",                                      "c1092",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male,   Property.Collab),
-            new Character("Solitaria of the Snow",                    "c2111",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Sonia",                                    "c3104",      HeroElement.Light, HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Specimen Sez",                             "c2038",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Specter Tenebria",                         "c2050",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Specter Tenebria: Dark Tyrant",            "c2050_s01",  HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, Property.Skin),
-            new Character("Spirit Eye Celine",                        "c2103",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female),
-            new Character("Straze",                                   "c1034",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Summer Break Charlotte",                   "c5009",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female),
-            new Character("Summer's Disciple Alexa",                  "c4012",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female),
-            new Character("Summertime Iseria",                        "c5024",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-          //new Character("Support Model Brinus",                     "c1098",      HeroElement.Light, HeroRarity.Stars5, HeroClass.DummyClass, HeroGender.Female),
-            new Character("Surin",                                    "c1065",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female),
-            new Character("Suthan",                                   "c3155",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Sven",                                     "c3015",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Sylvan Sage Vivian",                       "c2088",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Taeyou",                                   "c1127",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Talaz",                                    "c3152",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Talia",                                    "c3154",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female),
-            new Character("Tamarinne",                                "c1067",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female),
-            new Character("Tamarinne: Starlit Concert",               "c1067_s01",  HeroElement.Fire,  HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, Property.Skin),
-            new Character("Taranor Guard",                            "c3032",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Taranor Royal Guard",                      "c3002",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Tempest Surin",                            "c2065",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female),
-            new Character("Tempest Surin: Autuman Beauty",            "c2065_s01",  HeroElement.Light, HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female, Property.Skin),
-            new Character("Tenebria",                                 "c1050",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Tenebria: Phantom Schoolgirl",             "c1050_s01",  HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female, Property.Skin),
-            new Character("Tieria",                                   "c3021",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Top Model Luluca",                         "c2082",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Troublemaker Crozet",                      "c2036",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Twisted Eidolon Kayron",                   "c2023",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Tywin",                                    "c1042",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male  ),
-            new Character("Unbound Knight Arowell",                   "c4004",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female),
-            new Character("Verdant Adin",                             "c4143",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female),
-            new Character("Vigilante Leader Glenn",                   "c4103",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Male  ),
-            new Character("Vildred",                                  "c1007",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Vildred: Distinguished Gentleman",         "c1007_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male,   Property.Skin),
-          //new Character("Vildred",                                  "c1007t",     HeroElement.Earth, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Male  ), no scar variant
-            new Character("Violet",                                   "c1074",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  ),
-            new Character("Violet: Ardent Gentleman",                 "c1074_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male,   Property.Skin),
-            new Character("Vivian",                                   "c1088",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female),
-            new Character("Vivian: Villainess",                       "c1088_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, Property.Skin),
-            new Character("Wanda",                                    "c3065",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Wanderer Silk",                            "c2004",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Watcher Schuri",                           "c2020",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Male  ),
-            new Character("Yoonryoung",                               "c3134",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female),
-            new Character("Yufine",                                   "c1016",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female),
-            new Character("Yufine: Adorable Flower Bud",              "c1016_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, Property.Skin),
-            new Character("Yulha",                                    "c1131",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female),
-            new Character("Yuna",                                     "c1030",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female),
-            new Character("Yuna: Afterschool Party!",                 "c1030_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, Property.Skin),
-            new Character("Zahhak",                                   "c1119",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  ),
-            new Character("Zealot Carmainerose",                      "c4071",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female),
-            new Character("Zeno",                                     "c1083",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Zerato",                                   "c1010",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("Zio",                                      "c1133",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  ),
-            new Character("ae-GISELLE",                               "c1138",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, Property.Collab),
-            new Character("ae-KARINA",                                "c1137",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female, Property.Collab),
-            new Character("ae-NINGNING",                              "c1140",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, Property.Collab),
-            new Character("ae-WINTER",                                "c1139",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female, Property.Collab),
-        };
+            //                                  Character Name,                             Character ID, Character Element, HeroRarity,        HeroClass,            Character Gender,  Hero Propertie;
+            Character c1144     = new Character("Abigail",                                  "c1144",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1144);
+            Character c1017     = new Character("Achates",                                  "c1017",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c1017);
+            Character c3143     = new Character("Adin",                                     "c3143",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female);                         List.Add(c3143);
+            Character c3043     = new Character("Adlay",                                    "c3043",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c3043);
+            Character c5001     = new Character("Adventurer Ras",                           "c5001",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c5001);
+            Character c3105     = new Character("Ainos",                                    "c3105",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c3105);
+            Character c4105     = new Character("Ainos 2.0",                                "c4105",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c4105);
+            Character c3093     = new Character("Ains",                                     "c3093",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c3093);
+            Character c1018     = new Character("Aither",                                   "c1018",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Male  );                         List.Add(c1018);
+            Character c1100     = new Character("Alencia",                                  "c1100",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1100);
+            Character c3012     = new Character("Alexa",                                    "c3012",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female);                         List.Add(c3012);
+            Character c4065     = new Character("All-Rounder Wanda",                        "c4065",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c4065);
+            Character c2042     = new Character("Ambitious Tywin",                          "c2042",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c2042);
+            Character c1143     = new Character("Amid",                                     "c1143",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c1143);
+            Character c6062     = new Character("Angel of Light Angelica",                  "c6062",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female);                         List.Add(c6062);
+            Character c4042     = new Character("Angelic Montmorancy",                      "c4042",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c4042);
+            Character c1062     = new Character("Angelica",                                 "c1062",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c1062);
+            Character c2019     = new Character("Apocalypse Ravi",                          "c2019",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c2019);
+            Character c1048     = new Character("Aramintha",                                "c1048",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c1048);
+            Character c2007     = new Character("Arbiter Vildred",                          "c2007",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c2007);
+            Character c5004     = new Character("Archdemon's Shadow",                       "c5004",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c5004);
+            Character c2099     = new Character("Architect Laika",                          "c2099",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c2099);
+            Character c1129     = new Character("Aria",                                     "c1129",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c1129);
+            Character c1008     = new Character("Armin",                                    "c1008",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female);                         List.Add(c1008);
+            Character c3004     = new Character("Arowell",                                  "c3004",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female);                         List.Add(c3004);
+            Character c1124     = new Character("Arunka",                                   "c1124",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1124);
+            Character c2013     = new Character("Assassin Cartuja",                         "c2013",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c2013);
+            Character c2014     = new Character("Assassin Cidd",                            "c2014",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c2014);
+            Character c2033     = new Character("Assassin Coli",                            "c2033",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female);                         List.Add(c2033);
+            Character c2091     = new Character("Astromancer Elena",                        "c2091",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c2091);
+            Character c2031     = new Character("Auxiliary Lots",                           "c2031",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c2031);
+            Character c3031     = new Character("Azalea",                                   "c3031",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c3031);
+            Character c1015     = new Character("Baal & Sezan",                             "c1015",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c1015);
+            Character c6008     = new Character("Bad Cat Armin",                            "c6008",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c6008);
+            Character c1053     = new Character("Basar",                                    "c1053",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c1053);
+            Character c3006     = new Character("Bask",                                     "c3006",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c3006);
+            Character c3095     = new Character("Batisse",                                  "c3095",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c3095);
+            Character c1141     = new Character("Beehoo",                                   "c1141",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Male  );                         List.Add(c1141);
+            Character c1117     = new Character("Belian",                                   "c1117",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female);                         List.Add(c1117);
+            Character c1071     = new Character("Bellona",                                  "c1071",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c1071);
+            Character c2043     = new Character("Benevolent Romann",                        "c2043",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c2043);
+            Character c2021     = new Character("Blaze Dingo",                              "c2021",      HeroElement.Light, HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Male  );                         List.Add(c2021);
+            Character c2011     = new Character("Blood Blade Karin",                        "c2011",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female);                         List.Add(c2011);
+            Character c2039     = new Character("Blood Moon Haste",                         "c2039",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Male  );                         List.Add(c2039);
+            Character c1097     = new Character("Bomb Model Kanna",                         "c1097",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c1097);
+            Character c2024     = new Character("Briar Witch Iseria",                       "c2024",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c2024);
+            Character c3001     = new Character("Butcher Corps Inquisitor",                 "c3001",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c3001);
+            Character c3124     = new Character("Camilla",                                  "c3124",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c3124);
+            Character c4034     = new Character("Captain Rikoris",                          "c4034",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c4034);
+            Character c3071     = new Character("Carmainerose",                             "c3071",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female);                         List.Add(c3071);
+            Character c3051     = new Character("Carrot",                                   "c3051",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female);                         List.Add(c3051);
+            Character c1013     = new Character("Cartuja",                                  "c1013",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c1013);
+            Character c1002     = new Character("Cecilia",                                  "c1002",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female);                         List.Add(c1002);
+            Character c3064     = new Character("Celeste",                                  "c3064",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c3064);
+            Character c2005     = new Character("Celestial Mercedes",                       "c2005",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female);                         List.Add(c2005);
+            Character c1103     = new Character("Celine",                                   "c1103",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female);                         List.Add(c1103);
+            Character c1081     = new Character("Cerise",                                   "c1081",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c1081);
+            Character c1079     = new Character("Cermia",                                   "c1079",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1079);
+            Character c2037     = new Character("Challenger Dominiel",                      "c2037",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female);                         List.Add(c2037);
+            Character c2010     = new Character("Champion Zerato",                          "c2010",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c2010);
+            Character c4001     = new Character("Chaos Inquisitor",                         "c4001",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c4001);
+            Character c4025     = new Character("Chaos Sect Axe",                           "c4025",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c4025);
+            Character c1027     = new Character("Charles",                                  "c1027",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c1027);
+            Character c1009     = new Character("Charlotte",                                "c1009",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female);                         List.Add(c1009);
+            Character c1049     = new Character("Chloe",                                    "c1049",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1049);
+            Character c1101     = new Character("Choux",                                    "c1101",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1101);
+            Character c3123     = new Character("Christy",                                  "c3123",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female);                         List.Add(c3123);
+            Character c3025     = new Character("Church of Ilryos Axe",                     "c3025",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c3025);
+            Character c1014     = new Character("Cidd",                                     "c1014",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c1014);
+            Character c1028     = new Character("Clarissa",                                 "c1028",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1028);
+            Character c2027     = new Character("Closer Charles",                           "c2027",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c2027);
+            Character c1033     = new Character("Coli",                                     "c1033",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female);                         List.Add(c1033);
+            Character c1099     = new Character("Command Model Laika",                      "c1099",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c1099);
+            Character c4035     = new Character("Commander Lorina",                         "c4035",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c4035);
+            Character c2080     = new Character("Commander Pavel",                          "c2080",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Male  );                         List.Add(c2080);
+            Character c2089     = new Character("Conqueror Lilias",                         "c2089",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c2089);
+            Character c1012     = new Character("Corvus",                                   "c1012",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c1012);
+            Character c2054     = new Character("Crescent Moon Rin",                        "c2054",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female);                         List.Add(c2054);
+            Character c2008     = new Character("Crimson Armin",                            "c2008",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female);                         List.Add(c2008);
+            Character c1036     = new Character("Crozet",                                   "c1036",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c1036);
+            Character c2012     = new Character("Dark Corvus",                              "c2012",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c2012);
+            Character c2090     = new Character("Death Dealer Ray",                         "c2090",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Male  );                         List.Add(c2090);
+            Character c2053     = new Character("Desert Jewel Basar",                       "c2053",      HeroElement.Light, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Male  );                         List.Add(c2053);
+            Character c2095     = new Character("Designer Lilibet",                         "c2095",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c2095);
+            Character c2022     = new Character("Destina",                                  "c2022",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c2022);
+            Character c1076     = new Character("Diene",                                    "c1076",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c1076);
+            Character c1021     = new Character("Dingo",                                    "c1021",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c1021);
+            Character c4073     = new Character("Doll Maker Pearlhorizon",                  "c4073",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female);                         List.Add(c4073);
+            Character c1037     = new Character("Dominiel",                                 "c1037",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female);                         List.Add(c1037);
+            Character c3044     = new Character("Doris",                                    "c3044",      HeroElement.Light, HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c3044);
+            Character c3094     = new Character("Eaton",                                    "c3094",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c3094);
+            Character c1111     = new Character("Eda",                                      "c1111",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c1111);
+            Character c1091     = new Character("Elena",                                    "c1091",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c1091);
+            Character c1142     = new Character("Eligos",                                   "c1142",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Male  );                         List.Add(c1142);
+            Character c3054     = new Character("Elson",                                    "c3054",      HeroElement.Light, HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Male  );                         List.Add(c3054);
+            Character c3022     = new Character("Enott",                                    "c3022",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c3022);
+            Character c1108     = new Character("Ervalen",                                  "c1108",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c1108);
+            Character c5050     = new Character("Fairytale Tenebria",                       "c5050",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c5050);
+            Character c2046     = new Character("Faithless Lidica",                         "c2046",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c2046);
+            Character c4003     = new Character("Falconer Kluri",                           "c4003",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female);                         List.Add(c4003);
+            Character c2002     = new Character("Fallen Cecilia",                           "c2002",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female);                         List.Add(c2002);
+            Character c2032     = new Character("Fighter Maya",                             "c2032",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female);                         List.Add(c2032);
+            Character c1110     = new Character("Flan",                                     "c1110",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c1110);
+            Character c3026     = new Character("Free Spirit Tieria",                       "c3026",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c3026);
+            Character c1087     = new Character("Furious",                                  "c1087",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Male  );                         List.Add(c1087);
+            Character c2035     = new Character("General Purrgis",                          "c2035",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c2035);
+            Character c3103     = new Character("Glenn",                                    "c3103",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Male  );                         List.Add(c3103);
+            Character c3074     = new Character("Gloomyrain",                               "c3074",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female);                         List.Add(c3074);
+            Character c3101     = new Character("Godmother",                                "c3101",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c3101);
+            Character c2086     = new Character("Great Chief Khawana",                      "c2086",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c2086);
+            Character c2018     = new Character("Guider Aither",                            "c2018",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c2018);
+            Character c3024     = new Character("Gunther",                                  "c3024",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c3024);
+            Character c3135     = new Character("Hasol",                                    "c3135",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female);                         List.Add(c3135);
+            Character c1039     = new Character("Haste",                                    "c1039",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c1039);
+            Character c3091     = new Character("Hataan",                                   "c3091",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c3091);
+            Character c3041     = new Character("Hazel",                                    "c3041",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c3041);
+            Character c3122     = new Character("Helen",                                    "c3122",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female);                         List.Add(c3122);
+            Character c3023     = new Character("Helga",                                    "c3023",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c3023);
+            Character c5016     = new Character("Holiday Yufine",                           "c5016",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c5016);
+            Character c4141     = new Character("Holy Flame Adin",                          "c4141",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female);                         List.Add(c4141);
+            Character c3055     = new Character("Hurado",                                   "c3055",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c3055);
+            Character c1128     = new Character("Hwayoung",                                 "c1128",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1128);
+            Character c3102     = new Character("Ian",                                      "c3102",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Male  );                         List.Add(c3102);
+            Character c1113     = new Character("Ilynav",                                   "c1113",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female);                         List.Add(c1113);
+            Character c2085     = new Character("Inferno Khawazu",                          "c2085",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c2085);
+            Character c1024     = new Character("Iseria",                                   "c1024",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c1024);
+            Character c3131     = new Character("Januta",                                   "c3131",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c3131);
+            Character c3053     = new Character("Jecht",                                    "c3053",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Male  );                         List.Add(c3053);
+            Character c3052     = new Character("Jena",                                     "c3052",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female);                         List.Add(c3052);
+            Character c2006     = new Character("Judge Kise",                               "c2006",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c2006);
+            Character c3011     = new Character("Judith",                                   "c3011",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female);                         List.Add(c3011);
+            Character c3151     = new Character("Juni",                                     "c3151",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c3151);
+            Character c1011     = new Character("Karin",                                    "c1011",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female);                         List.Add(c1011);
+            Character c1073     = new Character("Kawerik",                                  "c1073",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c1073);
+            Character c1023     = new Character("Kayron",                                   "c1023",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c1023);
+            Character c1047     = new Character("Ken",                                      "c1047",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c1047);
+            Character c1086     = new Character("Khawana",                                  "c1086",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female);                         List.Add(c1086);
+            Character c1085     = new Character("Khawazu",                                  "c1085",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c1085);
+            Character c3084     = new Character("Kikirat v2",                               "c3084",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c3084);
+            Character c3063     = new Character("Kiris",                                    "c3063",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c3063);
+            Character c1006     = new Character("Kise",                                     "c1006",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female);                         List.Add(c1006);
+            Character c2028     = new Character("Kitty Clarissa",                           "c2028",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c2028);
+            Character c3003     = new Character("Kluri",                                    "c3003",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female);                         List.Add(c3003);
+            Character c1070     = new Character("Krau",                                     "c1070",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c1070);
+            Character c1109     = new Character("Landy",                                    "c1109",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c1109);
+            Character c6011     = new Character("Last Piece Karin",                         "c6011",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female);                         List.Add(c6011);
+            Character c2070     = new Character("Last Rider Krau",                          "c2070",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c2070);
+            Character c3092     = new Character("Lena",                                     "c3092",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c3092);
+            Character c1029     = new Character("Leo",                                      "c1029",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Male  );                         List.Add(c1029);
+            Character c1046     = new Character("Lidica",                                   "c1046",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c1046);
+            Character c1089     = new Character("Lilias",                                   "c1089",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female);                         List.Add(c1089);
+            Character c1095     = new Character("Lilibet",                                  "c1095",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1095);
+            Character c3153     = new Character("Lilka",                                    "c3153",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c3153);
+            Character c2079     = new Character("Lionheart Cermia",                         "c2079",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c2079);
+            Character c2009     = new Character("Little Queen Charlotte",                   "c2009",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c2009);
+            Character c2071     = new Character("Lone Crescent Bellona",                    "c2071",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c2071);
+            Character c3035     = new Character("Lorina",                                   "c3035",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c3035);
+            Character c1031     = new Character("Lots",                                     "c1031",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Male  );                         List.Add(c1031);
+            Character c1126     = new Character("Lua",                                      "c1126",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c1126);
+            Character c3113     = new Character("Lucy",                                     "c3113",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c3113);
+            Character c1069     = new Character("Ludwig",                                   "c1069",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c1069);
+            Character c1082     = new Character("Luluca",                                   "c1082",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c1082);
+            Character c1066     = new Character("Luna",                                     "c1066",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1066);
+            Character c4044     = new Character("Magic Scholar Doris",                      "c4044",      HeroElement.Light, HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c4044);
+            Character c2049     = new Character("Maid Chloe",                               "c2049",      HeroElement.Light, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c2049);
+            Character c2047     = new Character("Martial Artist Ken",                       "c2047",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c2047);
+            Character c4041     = new Character("Mascot Hazel",                             "c4041",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c4041);
+            Character c1032     = new Character("Maya",                                     "c1032",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female);                         List.Add(c1032);
+            Character c2073     = new Character("Mediator Kawerik",                         "c2073",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c2073);
+            Character c3121     = new Character("Melany",                                   "c3121",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c3121);
+            Character c1096     = new Character("Melissa",                                  "c1096",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c1096);
+            Character c0002     = new Character("Mercedes",                                 "c0002",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female);                         List.Add(c0002);
+            Character c4023     = new Character("Mercenary Helga",                          "c4023",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c4023);
+            Character c3014     = new Character("Mirsa",                                    "c3014",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female);                         List.Add(c3014);
+            Character c3072     = new Character("Mistychain",                               "c3072",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female);                         List.Add(c3072);
+            Character c3042     = new Character("Montmorancy",                              "c3042",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c3042);
+            Character c6037     = new Character("Moon Bunny Dominiel",                      "c6037",      HeroElement.Light, HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c6037);
+            Character c1104     = new Character("Mort",                                     "c1104",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c1104);
+            Character c3033     = new Character("Mucacha",                                  "c3033",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c3033);
+            Character c1044     = new Character("Mui",                                      "c1044",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1044);
+            Character c4062     = new Character("Muse Rima",                                "c4062",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c4062);
+            Character c3132     = new Character("Muwi",                                     "c3132",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c3132);
+            Character c3061     = new Character("Nemunas",                                  "c3061",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c3061);
+            Character c2072     = new Character("Operator Sigret",                          "c2072",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c2072);
+            Character c3133     = new Character("Orte",                                     "c3133",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female);                         List.Add(c3133);
+            Character c3045     = new Character("Otillie",                                  "c3045",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female);                         List.Add(c3045);
+            Character c1080     = new Character("Pavel",                                    "c1080",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Male  );                         List.Add(c1080);
+            Character c2087     = new Character("Peacemaker Furious",                       "c2087",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Male  );                         List.Add(c2087);
+            Character c3073     = new Character("Pearlhorizon",                             "c3073",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female);                         List.Add(c3073);
+            Character c1125     = new Character("Peira",                                    "c1125",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female);                         List.Add(c1125);
+            Character c3125     = new Character("Penelope",                                 "c3125",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female);                         List.Add(c3125);
+            Character c2110     = new Character("Pirate Captain Flan",                      "c2110",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c2110);
+            Character c1112     = new Character("Politis",                                  "c1112",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c1112);
+            Character c1035     = new Character("Purrgis",                                  "c1035",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c1035);
+            Character c3005     = new Character("Pyllis",                                   "c3005",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female);                         List.Add(c3005);
+            Character c1118     = new Character("Ran",                                      "c1118",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c1118);
+            Character c1001     = new Character("Ras",                                      "c1001",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c1001);
+            Character c1078     = new Character("Vagabond Ras",                             "c1078",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c1078);
+            Character c1019     = new Character("Ravi",                                     "c1019",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1019);
+            Character c1090     = new Character("Ray",                                      "c1090",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Male  );                         List.Add(c1090);
+            Character c2074     = new Character("Remnant Violet",                           "c2074",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c2074);
+            Character c2102     = new Character("Requiem Roana",                            "c2102",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c2102);
+            Character c3075     = new Character("Requiemroar",                              "c3075",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c3075);
+            Character c4051     = new Character("Researcher Carrot",                        "c4051",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female);                         List.Add(c4051);
+            Character c4013     = new Character("Righteous Thief Roozid",                   "c4013",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c4013);
+            Character c3034     = new Character("Rikoris",                                  "c3034",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c3034);
+            Character c3062     = new Character("Rima",                                     "c3062",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c3062);
+            Character c1054     = new Character("Rin",                                      "c1054",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c1054);
+            Character c2029     = new Character("Roaming Warrior Leo",                      "c2029",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Male  );                         List.Add(c2029);
+            Character c1102     = new Character("Roana",                                    "c1102",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c1102);
+            Character c1043     = new Character("Romann",                                   "c1043",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c1043);
+            Character c3013     = new Character("Roozid",                                   "c3013",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c3013);
+            Character c1003     = new Character("Rose",                                     "c1003",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female);                         List.Add(c1003);
+            Character c1022     = new Character("Ruele of Light",                           "c1022",      HeroElement.Light, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c1022);
+            Character c2015     = new Character("Sage Baal & Sezan",                        "c2015",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c2015);
+            Character c4144     = new Character("Savior Adin",                              "c4144",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female);                         List.Add(c4144);
+            Character c1020     = new Character("Schuri",                                   "c1020",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Male  );                         List.Add(c1020);
+            Character c5071     = new Character("Seaside Bellona",                          "c5071",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c5071);
+            Character c1106     = new Character("Senya",                                    "c1106",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female);                         List.Add(c1106);
+            Character c4142     = new Character("Serene Purity Adin",                       "c4142",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female);                         List.Add(c4142);
+            Character c1040     = new Character("Serila",                                   "c1040",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female);                         List.Add(c1040);
+            Character c1038     = new Character("Sez",                                      "c1038",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c1038);
+            Character c4005     = new Character("Shadow Knight Pyllis",                     "c4005",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female);                         List.Add(c4005);
+            Character c2003     = new Character("Shadow Rose",                              "c2003",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female);                         List.Add(c2003);
+            Character c1132     = new Character("Sharun",                                   "c1132",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c1132);
+            Character c4052     = new Character("Shepherd Jena",                            "c4052",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female);                         List.Add(c4052);
+            Character c2017     = new Character("Shooting Star Achates",                    "c2017",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c2017);
+            Character c1072     = new Character("Sigret",                                   "c1072",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1072);
+            Character c1004     = new Character("Silk",                                     "c1004",      HeroElement.Earth, HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c1004);
+            Character c2048     = new Character("Silver Blade Aramintha",                   "c2048",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c2048);
+            Character c2062     = new Character("Sinful Angelica",                          "c2062",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c2062);
+            Character c2111     = new Character("Solitaria of the Snow",                    "c2111",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c2111);
+            Character c3104     = new Character("Sonia",                                    "c3104",      HeroElement.Light, HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c3104);
+            Character c2038     = new Character("Specimen Sez",                             "c2038",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c2038);
+            Character c2050     = new Character("Specter Tenebria",                         "c2050",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c2050);
+            Character c2103     = new Character("Spirit Eye Celine",                        "c2103",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female);                         List.Add(c2103);
+            Character c1034     = new Character("Straze",                                   "c1034",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c1034);
+            Character c5009     = new Character("Summer Break Charlotte",                   "c5009",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female);                         List.Add(c5009);
+            Character c4012     = new Character("Summer's Disciple Alexa",                  "c4012",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female);                         List.Add(c4012);
+            Character c5024     = new Character("Summertime Iseria",                        "c5024",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c5024);
+            Character c1065     = new Character("Surin",                                    "c1065",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female);                         List.Add(c1065);
+            Character c3155     = new Character("Suthan",                                   "c3155",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c3155);
+            Character c3015     = new Character("Sven",                                     "c3015",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c3015);
+            Character c2088     = new Character("Sylvan Sage Vivian",                       "c2088",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c2088);
+            Character c1127     = new Character("Taeyou",                                   "c1127",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c1127);
+            Character c3152     = new Character("Talaz",                                    "c3152",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c3152);
+            Character c3154     = new Character("Talia",                                    "c3154",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female);                         List.Add(c3154);
+            Character c1067     = new Character("Tamarinne",                                "c1067",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female);                         List.Add(c1067);
+            Character c3032     = new Character("Taranor Guard",                            "c3032",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c3032);
+            Character c3002     = new Character("Taranor Royal Guard",                      "c3002",      HeroElement.Ice,   HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c3002);
+            Character c2065     = new Character("Tempest Surin",                            "c2065",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female);                         List.Add(c2065);
+            Character c1050     = new Character("Tenebria",                                 "c1050",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c1050);
+            Character c3021     = new Character("Tieria",                                   "c3021",      HeroElement.Fire,  HeroRarity.Stars3, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c3021);
+            Character c2082     = new Character("Top Model Luluca",                         "c2082",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c2082);
+            Character c2036     = new Character("Troublemaker Crozet",                      "c2036",      HeroElement.Dark,  HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c2036);
+            Character c2023     = new Character("Twisted Eidolon Kayron",                   "c2023",      HeroElement.Light, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c2023);
+            Character c1042     = new Character("Tywin",                                    "c1042",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male  );                         List.Add(c1042);
+            Character c4004     = new Character("Unbound Knight Arowell",                   "c4004",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female);                         List.Add(c4004);
+            Character c4143     = new Character("Verdant Adin",                             "c4143",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Thief,      HeroGender.Female);                         List.Add(c4143);
+            Character c4103     = new Character("Vigilante Leader Glenn",                   "c4103",      HeroElement.Earth, HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Male  );                         List.Add(c4103);
+            Character c1007     = new Character("Vildred",                                  "c1007",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c1007);
+            Character c1074     = new Character("Violet",                                   "c1074",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male  );                         List.Add(c1074);
+            Character c1088     = new Character("Vivian",                                   "c1088",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female);                         List.Add(c1088);
+            Character c3065     = new Character("Wanda",                                    "c3065",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c3065);
+            Character c2004     = new Character("Wanderer Silk",                            "c2004",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c2004);
+            Character c2020     = new Character("Watcher Schuri",                           "c2020",      HeroElement.Light, HeroRarity.Stars4, HeroClass.Ranger,     HeroGender.Male  );                         List.Add(c2020);
+            Character c3134     = new Character("Yoonryoung",                               "c3134",      HeroElement.Light, HeroRarity.Stars3, HeroClass.Knight,     HeroGender.Female);                         List.Add(c3134);
+            Character c1016     = new Character("Yufine",                                   "c1016",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female);                         List.Add(c1016);
+            Character c1131     = new Character("Yulha",                                    "c1131",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female);                         List.Add(c1131);
+            Character c1030     = new Character("Yuna",                                     "c1030",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female);                         List.Add(c1030);
+            Character c1119     = new Character("Zahhak",                                   "c1119",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male  );                         List.Add(c1119);
+            Character c4071     = new Character("Zealot Carmainerose",                      "c4071",      HeroElement.Dark,  HeroRarity.Stars3, HeroClass.Mage,       HeroGender.Female);                         List.Add(c4071);
+            Character c1083     = new Character("Zeno",                                     "c1083",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c1083);
+            Character c1010     = new Character("Zerato",                                   "c1010",      HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c1010);
+            Character c1133     = new Character("Zio",                                      "c1133",      HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male  );                         List.Add(c1133);
+            /* COLLABS */
+            Character c1138     = new Character("ae-GISELLE",                               "c1138",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, Property.Collab);        List.Add(c1138);
+            Character c1137     = new Character("ae-KARINA",                                "c1137",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female, Property.Collab);        List.Add(c1137);
+            Character c1140     = new Character("ae-NINGNING",                              "c1140",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, Property.Collab);        List.Add(c1140);
+            Character c1139     = new Character("ae-WINTER",                                "c1139",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female, Property.Collab);        List.Add(c1139);
+            Character c1093     = new Character("Baiken",                                   "c1093",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female, Property.Collab);        List.Add(c1093);
+            Character c1146     = new Character("Benimaru",                                 "c1146",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male,   Property.Collab);        List.Add(c1146);
+            Character c1094     = new Character("Dizzy",                                    "c1094",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, Property.Collab);        List.Add(c1094);
+            Character c1134     = new Character("Edward Elric",                             "c1134",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male,   Property.Collab);        List.Add(c1134);
+            Character c1105     = new Character("Elphelt",                                  "c1105",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, Property.Collab);        List.Add(c1105);
+            Character c1116     = new Character("Emilia",                                   "c1116",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, Property.Collab);        List.Add(c1116);
+            Character c1130     = new Character("Jack O’",                                  "c1130",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, Property.Collab);        List.Add(c1130);
+            Character c1107     = new Character("Kizuna AI",                                "c1107",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female, Property.Collab);        List.Add(c1107);
+            Character c1122     = new Character("Milim",                                    "c1122",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, Property.Collab);        List.Add(c1122);
+            Character c1115     = new Character("Ram",                                      "c1115",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, Property.Collab);        List.Add(c1115);
+            Character c1114     = new Character("Rem",                                      "c1114",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, Property.Collab);        List.Add(c1114);
+            Character c1121     = new Character("Rimuru",                                   "c1121",      HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male,   Property.Collab);        List.Add(c1121);
+            Character c1136     = new Character("Riza Hawkeye",                             "c1136",      HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, Property.Collab);        List.Add(c1136);
+            Character c1135     = new Character("Roy Mustang",                              "c1135",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male,   Property.Collab);        List.Add(c1135);
+            Character c1123     = new Character("Shuna",                                    "c1123",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, Property.Collab);        List.Add(c1123);
+            Character c1092     = new Character("Sol",                                      "c1092",      HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male,   Property.Collab);        List.Add(c1092);
+            /* SKINS */
+            Character c1017_s01 = new Character("Achates: Azure Sea",                       "c1017_s01",  HeroElement.Fire,  HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female, c1017, Property.Skin);   List.Add(c1017_s01);
+            Character c1018_s01 = new Character("Aither: Star of Ezera",                    "c1018_s01",  HeroElement.Ice,   HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Male,   c1018, Property.Skin);   List.Add(c1018_s01);
+            Character c1100_s01 = new Character("Alencia: Gift Granny",                     "c1100_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, c1100, Property.Skin);   List.Add(c1100_s01);
+            Character c4042_s01 = new Character("Angelic Montmorancy: Serene Sea",          "c4042_s01",  HeroElement.Ice,   HeroRarity.Stars3, HeroClass.SoulWeaver, HeroGender.Female, c4042, Property.Skin);   List.Add(c4042_s01);
+            Character c1062_s01 = new Character("Angelica: Mysterious Transfer Student",    "c1062_s01",  HeroElement.Ice,   HeroRarity.Stars4, HeroClass.SoulWeaver, HeroGender.Female, c1062, Property.Skin);   List.Add(c1062_s01);
+            Character c2019_s01 = new Character("Apocalypse Ravi: Avatar of Bloodlust",     "c2019_s01",  HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, c2019, Property.Skin);   List.Add(c2019_s01);
+            Character c2007_s01 = new Character("Arbiter Vildred: Dark Monarch",            "c2007_s01",  HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male,   c2007, Property.Skin);   List.Add(c2007_s01);
+            Character c1053_s01 = new Character("Basar: Sophisticated Magnate",             "c1053_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Male,   c1053, Property.Skin);   List.Add(c1053_s01);
+            Character c1097_s01 = new Character("Bomb Model Kanna: Special Gift",           "c1097_s01",  HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, c1097, Property.Skin);   List.Add(c1097_s01);
+            Character c1002_s01 = new Character("Cecilia: Black-Winged Succubus",           "c1002_s01",  HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female, c1002, Property.Skin);   List.Add(c1002_s01);
+            Character c1079_s01 = new Character("Cermia: Beachside Merrymakes",             "c1079_s01",  HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, c1079, Property.Skin);   List.Add(c1079_s01);
+            Character c1027_s01 = new Character("Charles: Demon Hunter",                    "c1027_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Male,   c1027, Property.Skin);   List.Add(c1027_s01);
+            Character c1101_s01 = new Character("Choux: 2022 E7WC",                         "c1101_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, c1101, Property.Skin);   List.Add(c1101_s01);
+            Character c1014_s01 = new Character("Cidd: Masked Gentleman",                   "c1014_s01",  HeroElement.Earth, HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Male,   c1014, Property.Skin);   List.Add(c1014_s01);
+            Character c2022_s01 = new Character("Destina: Spring Breeze",                   "c2022_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, c2022, Property.Skin);   List.Add(c2022_s01);
+            Character c1076_s01 = new Character("Diene: Magical Girl",                      "c1076_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, c1076, Property.Skin);   List.Add(c1076_s01);
+            Character c1091_s01 = new Character("Elena: Starlit Melody",                    "c1091_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, c1091, Property.Skin);   List.Add(c1091_s01);
+            Character c2046_s01 = new Character("Faithless Lidica: Victorious Knight",      "c2046_s01",  HeroElement.Light, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, c2046, Property.Skin);   List.Add(c2046_s01);
+            Character c2002_s01 = new Character("Fallen Cecilia: White Warmth",             "c2002_s01",  HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Knight,     HeroGender.Female, c2002, Property.Skin);   List.Add(c2002_s01);
+            Character c1024_s01 = new Character("Iseria: Night of White Flowers",           "c1024_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, c1024, Property.Skin);   List.Add(c1024_s01);
+            Character c2006_s01 = new Character("Judge Kise: Heir of Holy Light",           "c2006_s01",  HeroElement.Light, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, c2006, Property.Skin);   List.Add(c2006_s01);
+            Character c1011_s01 = new Character("Karin: Shore Patrol",                      "c1011_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Female, c1011, Property.Skin);   List.Add(c1011_s01);
+            Character c1023_s01 = new Character("Kayron: Time Rabbit",                      "c1023_s01",  HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male,   c1023, Property.Skin);   List.Add(c1023_s01);
+            Character c1046_s01 = new Character("Lidica: Bride of Roses",                   "c1046_s01",  HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, c1046, Property.Skin);   List.Add(c1046_s01);
+            Character c2009_s01 = new Character("Little Queen Charlotte: Elegant Excurion", "c2009_s01",  HeroElement.Light, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, c2009, Property.Skin);   List.Add(c2009_s01);
+            Character c1082_s01 = new Character("Luluca: Lovely Patissiere",                "c1082_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, c1082, Property.Skin);   List.Add(c1082_s01);
+            Character c2049_s01 = new Character("Maid Chloe: Energetic",                    "c2049_s01",  HeroElement.Light, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, c2049, Property.Skin);   List.Add(c2049_s01);
+            Character c2073_s01 = new Character("Mediator Kawerik: Calamity's Equilibrium", "c2073_s01",  HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Male,   c2073, Property.Skin);   List.Add(c2073_s01);
+            Character c1005_s01 = new Character("Mercedes: Fluffy Lady",                    "c1005_s01",  HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female, c0002, Property.Skin);   List.Add(c1005_s01);
+            Character c1118_s01 = new Character("Ran: Pure White Heart",                    "c1118_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male,   c1118, Property.Skin);   List.Add(c1118_s01);
+            Character c1003_s01 = new Character("Rose: Dark Angel",                         "c1003_s01",  HeroElement.Ice,   HeroRarity.Stars4, HeroClass.Knight,     HeroGender.Female, c1003, Property.Skin);   List.Add(c1003_s01);
+            Character c1022_s01 = new Character("Ruele of Light: Heir of Radiance",         "c1022_s01",  HeroElement.Light, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, c1022, Property.Skin);   List.Add(c1022_s01);
+            Character c1038_s01 = new Character("Sez: Aloof Lifeguard",                     "c1038_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male,   c1038, Property.Skin);   List.Add(c1038_s01);
+            Character c2050_s01 = new Character("Specter Tenebria: Dark Tyrant",            "c2050_s01",  HeroElement.Dark,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, c2050, Property.Skin);   List.Add(c2050_s01);
+            Character c1067_s01 = new Character("Tamarinne: Starlit Concert",               "c1067_s01",  HeroElement.Fire,  HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Female, c1067, Property.Skin);   List.Add(c1067_s01);
+            Character c2065_s01 = new Character("Tempest Surin: Autuman Beauty",            "c2065_s01",  HeroElement.Light, HeroRarity.Stars4, HeroClass.Thief,      HeroGender.Female, c2065, Property.Skin);   List.Add(c2065_s01);
+            Character c1050_s01 = new Character("Tenebria: Phantom Schoolgirl",             "c1050_s01",  HeroElement.Fire,  HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, c1050, Property.Skin);   List.Add(c1050_s01);
+            Character c1007_s01 = new Character("Vildred: Distinguished Gentleman",         "c1007_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male,   c1007, Property.Skin);   List.Add(c1007_s01);
+            Character c1074_s01 = new Character("Violet: Ardent Gentleman",                 "c1074_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Thief,      HeroGender.Male,   c1074, Property.Skin);   List.Add(c1074_s01);
+            Character c1088_s01 = new Character("Vivian: Villainess",                       "c1088_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Mage,       HeroGender.Female, c1088, Property.Skin);   List.Add(c1088_s01);
+            Character c1016_s01 = new Character("Yufine: Adorable Flower Bud",              "c1016_s01",  HeroElement.Earth, HeroRarity.Stars5, HeroClass.Warrior,    HeroGender.Female, c1016, Property.Skin);   List.Add(c1016_s01);
+            Character c1030_s01 = new Character("Yuna: Afterschool Party!",                 "c1030_s01",  HeroElement.Ice,   HeroRarity.Stars5, HeroClass.Ranger,     HeroGender.Female, c1030, Property.Skin);   List.Add(c1030_s01);
+            /* REMOVED FROM LIST / UNKNOWN */
+          //Character c3026     = new Character("Free Spirit Tieria",                       "c3026_s01",  HeroElement.Light, HeroRarity.Stars4, HeroClass.Warrior,    HeroGender.Female, Property.Skin)           List.Add(c3026);
+          //Character c1005     = new Character("Mercedes",                                 "c1005",      HeroElement.Fire,  HeroRarity.Stars4, HeroClass.Mage,       HeroGender.Female), before power u;         List.Add(c1005);
+          //Character c1098     = new Character("Support Model Brinus",                     "c1098",      HeroElement.Light, HeroRarity.Stars5, HeroClass.DummyClass, HeroGender.Female);                         List.Add(c1098);
+          //Character c1007     = new Character("Vildred",                                  "c1007t",     HeroElement.Earth, HeroRarity.Stars5, HeroClass.SoulWeaver, HeroGender.Male  ); no scar variant         List.Add(c1007);
+        }
 
         /// <summary>
         /// Apply existing filters on list
         /// </summary>
         /// <param name="filterType">Type of filter to apply</param>
-        public void FilterList(FilterType filterType)
+        public void FilterList(Enum filterType)
         {
+            if (filterType.GetType() != typeof(FilterType.ByElement) && filterType.GetType() != typeof(FilterType.ByClass) && filterType.GetType() != typeof(FilterType.ByRarity) && filterType.GetType() != typeof(FilterType.ByGender) && filterType.GetType() != typeof(FilterType.ByProperty))
+                return;
+            
             int i = 0;
             switch (filterType)
             {
-                case FilterType.OnlyFire:
+                case FilterType.ByElement.OnlyFire:
                     while (i < List.Count)
                     {
-                        if (List[i].heroElement != HeroElement.Fire )
+                        if (List[i].HeroElement != HeroElement.Fire )
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.OnlyEarth:
+                case FilterType.ByElement.OnlyEarth:
                     while (i < List.Count)
                     {
-                        if (List[i].heroElement != HeroElement.Earth)
+                        if (List[i].HeroElement != HeroElement.Earth)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.OnlyIce:
+                case FilterType.ByElement.OnlyIce:
                     while (i < List.Count)
                     {
-                        if (List[i].heroElement != HeroElement.Ice  )
+                        if (List[i].HeroElement != HeroElement.Ice  )
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.OnlyLight:
+                case FilterType.ByElement.OnlyLight:
                     while (i < List.Count)
                     {
-                        if (List[i].heroElement != HeroElement.Light)
+                        if (List[i].HeroElement != HeroElement.Light)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.OnlyDark:
+                case FilterType.ByElement.OnlyDark:
                     while (i < List.Count)
                     {
-                        if (List[i].heroElement != HeroElement.Dark )
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-
-                case FilterType.RemoveAllFire:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroElement == HeroElement.Fire )
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.RemoveAllEarth:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroElement == HeroElement.Earth)
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.RemoveAllIce:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroElement == HeroElement.Ice  )
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.RemoveAllLight:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroElement == HeroElement.Light)
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.RemoveAllDark:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroElement == HeroElement.Dark )
+                        if (List[i].HeroElement != HeroElement.Dark )
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
 
-
-                case FilterType.OnlyDummyClass:
+                case FilterType.ByElement.RemoveAllFire:
                     while (i < List.Count)
                     {
-                        if (List[i].heroClass != HeroClass.DummyClass)
+                        if (List[i].HeroElement == HeroElement.Fire )
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.OnlyWarrior:
+                case FilterType.ByElement.RemoveAllEarth:
                     while (i < List.Count)
                     {
-                        if (List[i].heroClass != HeroClass.Warrior)
+                        if (List[i].HeroElement == HeroElement.Earth)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.OnlyKnight:
+                case FilterType.ByElement.RemoveAllIce:
                     while (i < List.Count)
                     {
-                        if (List[i].heroClass != HeroClass.Knight)
+                        if (List[i].HeroElement == HeroElement.Ice  )
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.OnlyThief:
+                case FilterType.ByElement.RemoveAllLight:
                     while (i < List.Count)
                     {
-                        if (List[i].heroClass != HeroClass.Thief)
+                        if (List[i].HeroElement == HeroElement.Light)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.OnlyMage:
+                case FilterType.ByElement.RemoveAllDark:
                     while (i < List.Count)
                     {
-                        if (List[i].heroClass != HeroClass.Mage)
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.OnlyRanger:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroClass != HeroClass.Ranger)
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.OnlySoulWeaver:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroClass != HeroClass.SoulWeaver)
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-
-                case FilterType.RemoveAllDummyClass:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroClass == HeroClass.DummyClass)
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.RemoveAllWarrior:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroClass == HeroClass.Warrior)
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.RemoveAllKnight:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroClass == HeroClass.Knight)
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.RemoveAllThief:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroClass == HeroClass.Thief)
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.RemoveAllMage:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroClass == HeroClass.Mage)
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.RemoveAllRanger:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroClass == HeroClass.Ranger)
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.RemoveAllSoulWeaver:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroClass == HeroClass.SoulWeaver)
+                        if (List[i].HeroElement == HeroElement.Dark )
                             List.RemoveAt(i);
                         else
                             i++;
@@ -753,95 +678,128 @@ namespace E7CharactersManager
                     break;
 
 
-                case FilterType.OnlyStars3:
+                case FilterType.ByClass.OnlyDummyClass:
                     while (i < List.Count)
                     {
-                        if (List[i].heroRarity != HeroRarity.Stars3)
+                        if (List[i].HeroClass != HeroClass.DummyClass)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.OnlyStars4:
+                case FilterType.ByClass.OnlyWarrior:
                     while (i < List.Count)
                     {
-                        if (List[i].heroRarity != HeroRarity.Stars4)
+                        if (List[i].HeroClass != HeroClass.Warrior)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.OnlyStars5:
+                case FilterType.ByClass.OnlyKnight:
                     while (i < List.Count)
                     {
-                        if (List[i].heroRarity != HeroRarity.Stars5)
+                        if (List[i].HeroClass != HeroClass.Knight)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-
-                case FilterType.RemoveAllStars3:
+                case FilterType.ByClass.OnlyThief:
                     while (i < List.Count)
                     {
-                        if (List[i].heroRarity == HeroRarity.Stars3)
+                        if (List[i].HeroClass != HeroClass.Thief)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.RemoveAllStars4:
+                case FilterType.ByClass.OnlyMage:
                     while (i < List.Count)
                     {
-                        if (List[i].heroRarity == HeroRarity.Stars4)
+                        if (List[i].HeroClass != HeroClass.Mage)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.RemoveAllStars5:
+                case FilterType.ByClass.OnlyRanger:
                     while (i < List.Count)
                     {
-                        if (List[i].heroRarity == HeroRarity.Stars5)
+                        if (List[i].HeroClass != HeroClass.Ranger)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-
-
-                case FilterType.OnlyMales:
+                case FilterType.ByClass.OnlySoulWeaver:
                     while (i < List.Count)
                     {
-                        if (List[i].heroGender != HeroGender.Male)
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.OnlyFemales:
-                    while (i < List.Count)
-                    {
-                        if (List[i].heroGender != HeroGender.Female)
+                        if (List[i].HeroClass != HeroClass.SoulWeaver)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
 
-                case FilterType.RemoveAllMales:
+                case FilterType.ByClass.RemoveAllDummyClass:
                     while (i < List.Count)
                     {
-                        if (List[i].heroGender == HeroGender.Male)
+                        if (List[i].HeroClass == HeroClass.DummyClass)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.RemoveAllFemales:
+                case FilterType.ByClass.RemoveAllWarrior:
                     while (i < List.Count)
                     {
-                        if (List[i].heroGender == HeroGender.Female)
+                        if (List[i].HeroClass == HeroClass.Warrior)
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+                case FilterType.ByClass.RemoveAllKnight:
+                    while (i < List.Count)
+                    {
+                        if (List[i].HeroClass == HeroClass.Knight)
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+                case FilterType.ByClass.RemoveAllThief:
+                    while (i < List.Count)
+                    {
+                        if (List[i].HeroClass == HeroClass.Thief)
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+                case FilterType.ByClass.RemoveAllMage:
+                    while (i < List.Count)
+                    {
+                        if (List[i].HeroClass == HeroClass.Mage)
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+                case FilterType.ByClass.RemoveAllRanger:
+                    while (i < List.Count)
+                    {
+                        if (List[i].HeroClass == HeroClass.Ranger)
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+                case FilterType.ByClass.RemoveAllSoulWeaver:
+                    while (i < List.Count)
+                    {
+                        if (List[i].HeroClass == HeroClass.SoulWeaver)
                             List.RemoveAt(i);
                         else
                             i++;
@@ -849,80 +807,187 @@ namespace E7CharactersManager
                     break;
 
 
-                case FilterType.OnlyClothesChange:
+                case FilterType.ByRarity.OnlyStars3:
                     while (i < List.Count)
                     {
-                        if (!List[i].properties.Contains(Property.ClothesChange))
+                        if (List[i].HeroRarity != HeroRarity.Stars3)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.OnlySpecialtyChange:
+                case FilterType.ByRarity.OnlyStars4:
                     while (i < List.Count)
                     {
-                        if (!List[i].properties.Contains(Property.SpecialtyChange))
+                        if (List[i].HeroRarity != HeroRarity.Stars4)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.OnlyCollab:
+                case FilterType.ByRarity.OnlyStars5:
                     while (i < List.Count)
                     {
-                        if (!List[i].properties.Contains(Property.Collab))
-                            List.RemoveAt(i);
-                        else
-                            i++;
-                    }
-                    break;
-                case FilterType.OnlySkin:
-                    while (i < List.Count)
-                    {
-                        if (!List[i].properties.Contains(Property.Skin))
+                        if (List[i].HeroRarity != HeroRarity.Stars5)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
 
-                case FilterType.RemoveAllClothesChange:
+                case FilterType.ByRarity.RemoveAllStars3:
                     while (i < List.Count)
                     {
-                        if (List[i].properties.Contains(Property.ClothesChange))
+                        if (List[i].HeroRarity == HeroRarity.Stars3)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.RemoveAllSpecialtyChange:
+                case FilterType.ByRarity.RemoveAllStars4:
                     while (i < List.Count)
                     {
-                        if (List[i].properties.Contains(Property.SpecialtyChange))
+                        if (List[i].HeroRarity == HeroRarity.Stars4)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.RemoveAllCollab:
+                case FilterType.ByRarity.RemoveAllStars5:
                     while (i < List.Count)
                     {
-                        if (List[i].properties.Contains(Property.Collab))
+                        if (List[i].HeroRarity == HeroRarity.Stars5)
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
-                case FilterType.RemoveAllSkin:
+
+
+                case FilterType.ByGender.OnlyMales:
                     while (i < List.Count)
                     {
-                        if (List[i].properties.Contains(Property.Skin))
+                        if (List[i].HeroGender != HeroGender.Male)
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+                case FilterType.ByGender.OnlyFemales:
+                    while (i < List.Count)
+                    {
+                        if (List[i].HeroGender != HeroGender.Female)
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+
+                case FilterType.ByGender.RemoveAllMales:
+                    while (i < List.Count)
+                    {
+                        if (List[i].HeroGender == HeroGender.Male)
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+                case FilterType.ByGender.RemoveAllFemales:
+                    while (i < List.Count)
+                    {
+                        if (List[i].HeroGender == HeroGender.Female)
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+
+
+                case FilterType.ByProperty.OnlyClothesChange:
+                    while (i < List.Count)
+                    {
+                        if (!List[i].Properties.Contains(Property.ClothesChange))
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+                case FilterType.ByProperty.OnlySpecialtyChange:
+                    while (i < List.Count)
+                    {
+                        if (!List[i].Properties.Contains(Property.SpecialtyChange))
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+                case FilterType.ByProperty.OnlyCollab:
+                    while (i < List.Count)
+                    {
+                        if (!List[i].Properties.Contains(Property.Collab))
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+                case FilterType.ByProperty.OnlySkin:
+                    while (i < List.Count)
+                    {
+                        if (!List[i].Properties.Contains(Property.Skin))
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+
+                case FilterType.ByProperty.RemoveAllClothesChange:
+                    while (i < List.Count)
+                    {
+                        if (List[i].Properties.Contains(Property.ClothesChange))
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+                case FilterType.ByProperty.RemoveAllSpecialtyChange:
+                    while (i < List.Count)
+                    {
+                        if (List[i].Properties.Contains(Property.SpecialtyChange))
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+                case FilterType.ByProperty.RemoveAllCollab:
+                    while (i < List.Count)
+                    {
+                        if (List[i].Properties.Contains(Property.Collab))
+                            List.RemoveAt(i);
+                        else
+                            i++;
+                    }
+                    break;
+                case FilterType.ByProperty.RemoveAllSkin:
+                    while (i < List.Count)
+                    {
+                        if (List[i].Properties.Contains(Property.Skin))
                             List.RemoveAt(i);
                         else
                             i++;
                     }
                     break;
             }
+        }
+
+        public Character GetCharacterByName(string name)
+        {
+            Character character = null;
+            foreach (Character c in List)
+            {
+                if (c.Name == name)
+                    character = c;
+            }
+            return character;
         }
 
         /// <summary>
@@ -937,9 +1002,9 @@ namespace E7CharactersManager
 
             foreach (Character c in List)
             {
-                if (!File.Exists(appPath + Path.DirectorySeparatorChar + c.cid + ".png"))
+                if (!File.Exists(appPath + Path.DirectorySeparatorChar + c.CID + ".png"))
                 {
-                    OpenNewTab(url + c.cid);
+                    OpenNewTab(url + c.CID);
                 }
             }
         }
@@ -949,7 +1014,7 @@ namespace E7CharactersManager
         /// </summary>
         /// <param name="url">URL to open</param>
         /// <param name="retry">Always true, if false Chrome won't launch if not open</param>
-        private void OpenNewTab(string url, bool retry = true)
+        public void OpenNewTab(string url, bool retry = true)
         {
             Process[] chromeProcesses = Process.GetProcessesByName("chrome");
             if (chromeProcesses.Length > 0)
