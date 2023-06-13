@@ -150,6 +150,7 @@ namespace E7CharactersManager
             if (!ppList.Contains(Property.Collab))           CharactersList.FilterList(FilterType.ByProperty.RemoveAllCollab);
         
             cmbCharactersList.Items.Clear();
+            cmbCharactersList.Text = string.Empty;
             foreach (Character character in CharactersList.List) cmbCharactersList.Items.Add(character);
         }
 
@@ -166,7 +167,7 @@ namespace E7CharactersManager
             if (cmbCharactersList.SelectedItem == null) return;
 
             Character character = cmbCharactersList.SelectedItem as Character;
-            if (character.Properties.Contains(Property.Skin) || character.Properties.Contains(Property.SpecialtyChange))
+            if (character.Properties.Contains(Property.Skin))
                 CharactersList.OpenNewTab("https://epic7x.com/character/" + character.SkinOf.Name.ToLower().Replace(" ", "-") + "/");
             else
                 CharactersList.OpenNewTab("https://epic7x.com/character/" + character.Name.ToLower().Replace(" ", "-") + "/");
