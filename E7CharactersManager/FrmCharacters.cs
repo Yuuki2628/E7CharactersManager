@@ -1,17 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
+using System.Net;
 using System.Windows.Forms;
 
 namespace E7CharactersManager
 {
     public partial class E7CharactersList : Form
     {
+        private const string Version = "1.0.0";
+        private const string AppPath = @".\application.msi";
+        private const string ZipPath = @".\application.zip";
+        private const string ServerAppPath = @"";
         private CharactersList CharactersList { get; set; }
         private bool Initializing { get; set; } = true;
 
         public E7CharactersList()
         {
             InitializeComponent();
+            CheckForUpdate();
             for (int i = 0; i < checkListClass.Items.Count; i++) checkListClass.SetItemChecked(i, true);
             for (int i = 0; i < checkListElements.Items.Count; i++) checkListElements.SetItemChecked(i, true);
             for (int i = 0; i < checkListRarity.Items.Count; i++) checkListRarity.SetItemChecked(i, true);
@@ -22,6 +31,39 @@ namespace E7CharactersManager
             chbAlwaysOnTop.Checked = true;
 
             Initializing = false;
+        }
+
+        private void CheckForUpdate()
+        {
+            WebClient webClientVersionCheck = new WebClient();
+            WebClient webClientApplicationDownload = new WebClient();
+
+            string ServerVersion = webClientVersionCheck.DownloadString("").Replace("\n", "").Replace("\r", "");
+
+            if (ServerVersion != Version)
+            {
+                if (MessageBox.Show($"New update available!\nCurrently on version: {Version}\nNew version:{ServerVersion}", "Update available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    try
+                    {
+                        if (File.Exists(AppPath)) File.Delete(AppPath);
+                        webClientApplicationDownload.DownloadFile(ServerAppPath, ZipPath);
+
+                        ZipFile.ExtractToDirectory(ZipPath, AppPath);
+
+                        Process process = new Process();
+                        process.StartInfo.FileName = "msiexec";
+                        process.StartInfo.Arguments = String.Format("/i " + AppPath);
+
+                        this.Close();
+                        process.Start();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+            }
         }
 
         private void LoadFilteredList()
