@@ -10,9 +10,9 @@ namespace E7CharactersManager
 {
     public partial class E7CharactersList : Form
     {
-        private const string Version = "1.1.1.0";
-        private const string AppPath = @".\application.msi";
-        private const string ZipPath = @".\application.zip";
+        private const string Version = "1.1.1";
+        private const string AppPath = @"E7CharacterViewSetup.msi";
+        private const string ZipPath = @"E7CharacterViewSetup.zip";
         private const string ServerVersionPath = "https://raw.githubusercontent.com/Yuuki2628/E7CharactersManager/master/E7CharactersManager/Update/Version.txt";
         private const string ServerZipPath = "https://raw.githubusercontent.com/Yuuki2628/E7CharactersManager/master/E7CharactersManager/Update/E7CharacterViewSetup.zip";
         private CharactersList CharactersList { get; set; }
@@ -50,7 +50,7 @@ namespace E7CharactersManager
                         if (File.Exists(AppPath)) File.Delete(AppPath);
                         webClientApplicationDownload.DownloadFile(ServerZipPath, ZipPath);
 
-                        ZipFile.ExtractToDirectory(ZipPath, AppPath);
+                        ZipFile.ExtractToDirectory(ZipPath, @".\");
 
                         Process process = new Process();
                         process.StartInfo.FileName = "msiexec";

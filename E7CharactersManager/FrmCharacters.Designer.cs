@@ -236,7 +236,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "E7CharactersList";
-            this.Text = "Characters Selector";
+            this.Text = "Character Selector";
             this.Load += new System.EventHandler(this.E7CharactersList_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
