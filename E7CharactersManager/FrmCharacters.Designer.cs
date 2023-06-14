@@ -42,6 +42,7 @@
             this.lblFilterRarity = new System.Windows.Forms.Label();
             this.btnEpic7x = new System.Windows.Forms.Button();
             this.btnE7Vault = new System.Windows.Forms.Button();
+            this.chbAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblFilterClass
@@ -201,11 +202,23 @@
             this.btnE7Vault.UseVisualStyleBackColor = true;
             this.btnE7Vault.Click += new System.EventHandler(this.btnE7Vault_Click);
             // 
+            // chbAlwaysOnTop
+            // 
+            this.chbAlwaysOnTop.AutoSize = true;
+            this.chbAlwaysOnTop.Location = new System.Drawing.Point(245, 81);
+            this.chbAlwaysOnTop.Name = "chbAlwaysOnTop";
+            this.chbAlwaysOnTop.Size = new System.Drawing.Size(101, 17);
+            this.chbAlwaysOnTop.TabIndex = 14;
+            this.chbAlwaysOnTop.Text = "OnTop Window";
+            this.chbAlwaysOnTop.UseVisualStyleBackColor = true;
+            this.chbAlwaysOnTop.CheckedChanged += new System.EventHandler(this.chbAlwaysOnTop_CheckedChanged);
+            // 
             // E7CharactersList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(356, 354);
+            this.Controls.Add(this.chbAlwaysOnTop);
             this.Controls.Add(this.btnE7Vault);
             this.Controls.Add(this.btnEpic7x);
             this.Controls.Add(this.checkListRarity);
@@ -245,6 +258,7 @@
         private System.Windows.Forms.Label lblFilterRarity;
         private System.Windows.Forms.Button btnEpic7x;
         private System.Windows.Forms.Button btnE7Vault;
+        private System.Windows.Forms.CheckBox chbAlwaysOnTop;
     }
 }
 

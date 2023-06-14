@@ -18,6 +18,9 @@ namespace E7CharactersManager
             for (int i = 0; i < checkListGender.Items.Count; i++) checkListGender.SetItemChecked(i, true);
             for (int i = 0; i < checkListProperties.Items.Count; i++) checkListProperties.SetItemChecked(i, true);
 
+            this.TopMost = true;
+            chbAlwaysOnTop.Checked = true;
+
             Initializing = false;
         }
 
@@ -160,6 +163,8 @@ namespace E7CharactersManager
         private void checkListRarity_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
         private void checkListGender_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
         private void checkListProperties_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
+
+        private void chbAlwaysOnTop_CheckedChanged(object sender, EventArgs e) => this.TopMost = chbAlwaysOnTop.Checked;
 
         private void btnEpic7x_Click(object sender, EventArgs e)
         {
