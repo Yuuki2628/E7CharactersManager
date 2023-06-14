@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E7CharactersManager", "E7CharactersManager\E7CharactersManager.csproj", "{E68F7A31-4DCD-4B8E-AF56-B2BC5EEA78F4}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "E7CharacterViewSetup", "E7CharacterViewSetup\E7CharacterViewSetup.vdproj", "{87094AAA-363A-45CA-99EF-F3B1331B3141}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{E68F7A31-4DCD-4B8E-AF56-B2BC5EEA78F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E68F7A31-4DCD-4B8E-AF56-B2BC5EEA78F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E68F7A31-4DCD-4B8E-AF56-B2BC5EEA78F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87094AAA-363A-45CA-99EF-F3B1331B3141}.Debug|Any CPU.ActiveCfg = Debug
+		{87094AAA-363A-45CA-99EF-F3B1331B3141}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

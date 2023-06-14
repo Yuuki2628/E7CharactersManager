@@ -10,10 +10,11 @@ namespace E7CharactersManager
 {
     public partial class E7CharactersList : Form
     {
-        private const string Version = "1.0.0";
+        private const string Version = "1.1.0.0";
         private const string AppPath = @".\application.msi";
         private const string ZipPath = @".\application.zip";
-        private const string ServerAppPath = @"";
+        private const string ServerVersionPath = "https://raw.githubusercontent.com/Yuuki2628/E7CharactersManager/master/E7CharactersManager/Update/Version.txt";
+        private const string ServerZipPath = "https://raw.githubusercontent.com/Yuuki2628/E7CharactersManager/master/E7CharactersManager/Update/E7CharacterViewSetup.zip";
         private CharactersList CharactersList { get; set; }
         private bool Initializing { get; set; } = true;
 
@@ -38,7 +39,7 @@ namespace E7CharactersManager
             WebClient webClientVersionCheck = new WebClient();
             WebClient webClientApplicationDownload = new WebClient();
 
-            string ServerVersion = webClientVersionCheck.DownloadString("").Replace("\n", "").Replace("\r", "");
+            string ServerVersion = webClientVersionCheck.DownloadString(ServerVersionPath).Replace("\n", "").Replace("\r", "");
 
             if (ServerVersion != Version)
             {
@@ -47,7 +48,7 @@ namespace E7CharactersManager
                     try
                     {
                         if (File.Exists(AppPath)) File.Delete(AppPath);
-                        webClientApplicationDownload.DownloadFile(ServerAppPath, ZipPath);
+                        webClientApplicationDownload.DownloadFile(ServerZipPath, ZipPath);
 
                         ZipFile.ExtractToDirectory(ZipPath, AppPath);
 
