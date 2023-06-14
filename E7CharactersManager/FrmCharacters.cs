@@ -10,7 +10,7 @@ namespace E7CharactersManager
 {
     public partial class E7CharactersList : Form
     {
-        private const string Version = "1.1.0.0";
+        private const string Version = "1.1.1.0";
         private const string AppPath = @".\application.msi";
         private const string ZipPath = @".\application.zip";
         private const string ServerVersionPath = "https://raw.githubusercontent.com/Yuuki2628/E7CharactersManager/master/E7CharactersManager/Update/Version.txt";
