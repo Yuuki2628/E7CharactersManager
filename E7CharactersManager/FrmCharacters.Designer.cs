@@ -43,6 +43,9 @@
             this.btnEpic7x = new System.Windows.Forms.Button();
             this.btnE7Vault = new System.Windows.Forms.Button();
             this.chbAlwaysOnTop = new System.Windows.Forms.CheckBox();
+            this.lblCredits = new System.Windows.Forms.Label();
+            this.btnSource = new System.Windows.Forms.Button();
+            this.btnExportList = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblFilterClass
@@ -205,7 +208,7 @@
             // chbAlwaysOnTop
             // 
             this.chbAlwaysOnTop.AutoSize = true;
-            this.chbAlwaysOnTop.Location = new System.Drawing.Point(245, 81);
+            this.chbAlwaysOnTop.Location = new System.Drawing.Point(15, 351);
             this.chbAlwaysOnTop.Name = "chbAlwaysOnTop";
             this.chbAlwaysOnTop.Size = new System.Drawing.Size(101, 17);
             this.chbAlwaysOnTop.TabIndex = 14;
@@ -213,11 +216,43 @@
             this.chbAlwaysOnTop.UseVisualStyleBackColor = true;
             this.chbAlwaysOnTop.CheckedChanged += new System.EventHandler(this.chbAlwaysOnTop_CheckedChanged);
             // 
+            // lblCredits
+            // 
+            this.lblCredits.AutoSize = true;
+            this.lblCredits.Location = new System.Drawing.Point(122, 352);
+            this.lblCredits.Name = "lblCredits";
+            this.lblCredits.Size = new System.Drawing.Size(106, 13);
+            this.lblCredits.TabIndex = 15;
+            this.lblCredits.Text = "Application by: Yuuki";
+            // 
+            // btnSource
+            // 
+            this.btnSource.Location = new System.Drawing.Point(252, 347);
+            this.btnSource.Name = "btnSource";
+            this.btnSource.Size = new System.Drawing.Size(94, 22);
+            this.btnSource.TabIndex = 16;
+            this.btnSource.Text = "Source Code";
+            this.btnSource.UseVisualStyleBackColor = true;
+            this.btnSource.Click += new System.EventHandler(this.btnSource_Click);
+            // 
+            // btnExportList
+            // 
+            this.btnExportList.Location = new System.Drawing.Point(182, 81);
+            this.btnExportList.Name = "btnExportList";
+            this.btnExportList.Size = new System.Drawing.Size(81, 23);
+            this.btnExportList.TabIndex = 17;
+            this.btnExportList.Text = "Export List";
+            this.btnExportList.UseVisualStyleBackColor = true;
+            this.btnExportList.Click += new System.EventHandler(this.btnExportList_Click);
+            // 
             // E7CharactersList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(356, 354);
+            this.ClientSize = new System.Drawing.Size(356, 373);
+            this.Controls.Add(this.btnExportList);
+            this.Controls.Add(this.btnSource);
+            this.Controls.Add(this.lblCredits);
             this.Controls.Add(this.chbAlwaysOnTop);
             this.Controls.Add(this.btnE7Vault);
             this.Controls.Add(this.btnEpic7x);
@@ -259,6 +294,9 @@
         private System.Windows.Forms.Button btnEpic7x;
         private System.Windows.Forms.Button btnE7Vault;
         private System.Windows.Forms.CheckBox chbAlwaysOnTop;
+        private System.Windows.Forms.Label lblCredits;
+        private System.Windows.Forms.Button btnSource;
+        private System.Windows.Forms.Button btnExportList;
     }
 }
 

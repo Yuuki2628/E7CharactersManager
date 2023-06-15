@@ -10,7 +10,7 @@ namespace E7CharactersManager
 {
     public partial class E7CharactersList : Form
     {
-        private const string Version = "1.1.2";
+        private const string Version = "1.2.0";
         private const string AppPath = @"E7CharacterViewSetup.msi";
         private const string ZipPath = @"E7CharacterViewSetup.zip";
         private const string ServerVersionPath = "https://raw.githubusercontent.com/Yuuki2628/E7CharactersManager/master/E7CharactersManager/Update/Version.txt";
@@ -41,7 +41,10 @@ namespace E7CharactersManager
 
             string ServerVersion = webClientVersionCheck.DownloadString(ServerVersionPath).Replace("\n", "").Replace("\r", "");
 
-            if (ServerVersion != Version)
+            int LocalVersionValue = (Int32.Parse(Version.Split('.')[0]) * 100) + (Int32.Parse(Version.Split('.')[1]) * 10) + (Int32.Parse(Version.Split('.')[2]) * 1);
+            int ServerVersionValue = (Int32.Parse(ServerVersion.Split('.')[0]) * 100) + (Int32.Parse(ServerVersion.Split('.')[1]) * 10) + (Int32.Parse(ServerVersion.Split('.')[2]) * 1);
+
+            if (ServerVersionValue > LocalVersionValue)
             {
                 if (MessageBox.Show($"New update available!\nCurrently on version: {Version}\nNew version:{ServerVersion}", "Update available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
@@ -209,6 +212,11 @@ namespace E7CharactersManager
 
         private void chbAlwaysOnTop_CheckedChanged(object sender, EventArgs e) => this.TopMost = chbAlwaysOnTop.Checked;
 
+        private void btnSource_Click(object sender, EventArgs e)
+        {
+            ChromeManager.OpenNewTab("https://github.com/Yuuki2628/E7CharactersManager");
+        }
+
         private void btnEpic7x_Click(object sender, EventArgs e)
         {
             if(CharactersList.List.Count == 0) return;
@@ -216,9 +224,9 @@ namespace E7CharactersManager
 
             Character character = cmbCharactersList.SelectedItem as Character;
             if (character.Properties.Contains(Property.Skin))
-                CharactersList.OpenNewTab("https://epic7x.com/character/" + character.SkinOf.Name.ToLower().Replace(" ", "-") + "/");
+                ChromeManager.OpenNewTab("https://epic7x.com/character/" + character.SkinOf.Name.ToLower().Replace(" ", "-") + "/");
             else
-                CharactersList.OpenNewTab("https://epic7x.com/character/" + character.Name.ToLower().Replace(" ", "-") + "/");
+                ChromeManager.OpenNewTab("https://epic7x.com/character/" + character.Name.ToLower().Replace(" ", "-") + "/");
         }
 
         private void btnE7Vault_Click(object sender, EventArgs e)
@@ -227,7 +235,123 @@ namespace E7CharactersManager
             if (cmbCharactersList.SelectedItem == null) return;
 
             Character character = cmbCharactersList.SelectedItem as Character;
-            CharactersList.OpenNewTab("https://www.e7vau.lt/portrait-viewer.html?id=" + character.CID);
+            ChromeManager.OpenNewTab("https://www.e7vau.lt/portrait-viewer.html?id=" + character.CID);
+        }
+
+        private void btnExportList_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("This application works only if you have the following installed:\n-Chrome\n-Python\n-Selenium for Python\n\nDo you have all of them installed?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
+                return;
+
+            string list = "[";
+            foreach (Character character in cmbCharactersList.Items) list += $"\"{character.Name} : {character.CID} \", ";
+            list += "]";
+
+            if (File.Exists("script1.py")) File.Delete("script1.py");
+
+            string[] lines =
+            {
+                "from selenium import webdriver",
+                "from selenium.webdriver.common.keys import Keys",
+                "from selenium.webdriver.common.by import By",
+                "import time",
+                "",
+                "# Set up the web driver (e.g., for Chrome)",
+                "options = webdriver.ChromeOptions() ",
+                "options.add_argument('user-data-dir=C:\\\\\\\\Users\\\\Robin\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\User Data')",
+                "driver = webdriver.Chrome(executable_path='D:\\\\\\\\Documenti2\\\\temp\\\\chromedriver.exe', chrome_options=options)",
+                "#driver = webdriver.Chrome('/path/to/chromedriver')",
+                "",
+                "# Define your array of elements",
+                "elements = " + list,
+                "",
+                "print('Characters count: ' + str(len(elements)))",
+                "",
+                "# Iterate over the elements and fill/submit the form",
+                "for element in elements:",
+                "",
+                "    # Load the form URL",
+                "    driver.get('https://animebracket.com/epic-seven-best-waifu-contest-2023/nominate')",
+                "    driver.find_element(By.CLASS_NAME, 'accept').click()",
+                "    time.sleep(1)",
+                "",
+                "    # Find the form fields and fill them with the element",
+                "    field1 = driver.find_element(By.ID, 'txtName')",
+                "    field2 = driver.find_element(By.ID, 'txtSource')",
+                "    field3 = driver.find_element(By.ID, 'txtPic')",
+                "",
+                "    chname = element.split(' : ')[0]",
+                "    chlink = 'https://github.com/Yuuki2628/E7CharactersManager/tree/master/E7CharactersManager/Portrait' + element.split(' : ')[1]",
+                "    ",
+                "    field1.send_keys(chname)",
+                "    field2.send_keys('Epic Seven')",
+                "    field3.send_keys(chlink)",
+                "    ",
+                "    # Submit the form",
+                "    driver.find_elements(By.CLASS_NAME , 'small-button')[1].click()",
+                "    print(chlink + ' - ' + chname)",
+                "    time.sleep(3)",
+                "    ",
+                "# Load the form URL",
+                "driver.get('https://animebracket.com/me/process/epic-seven-best-waifu-contest-2023/nominations/')",
+                "time.sleep(2)",
+                "",
+                "try:",
+                "    for i in range(len(elements)):",
+                "        try:",
+                "            time.sleep(1)",
+                "            ",
+                "            button1 = driver.find_element(By.XPATH, '/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/DIV[1]/FORM[1]/DIV[1]/BUTTON[1]')",
+                "            button1.click()",
+                "            time.sleep(1)",
+                "",
+                "            try:",
+                "                button2 = driver.find_element(By.XPATH, '/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[2]/DIV[1]/DIV[2]/DIV[1]/BUTTON[1]')",
+                "                button2.click()",
+                "                time.sleep(1)",
+                "            except:",
+                "                button2 = driver.find_element(By.XPATH, '/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[3]/DIV[1]/DIV[2]/DIV[1]/BUTTON[1]')",
+                "                button2.click()",
+                "                time.sleep(1)",
+                "",
+                "            button3 = driver.find_element(By.XPATH, '/HTML[1]/BODY[1]/DIV[1]/DIV[1]/DIV[1]/DIV[1]/FORM[1]/DIV[2]/DIV[4]/BUTTON[1]')",
+                "            button3.click()",
+                "            time.sleep(1)",
+                "        ",
+                "        except:",
+                "            print('Error')",
+                "except:",
+                "    print('Exiting')",
+                "    ",
+                "    ",
+                "# Close the browser after completing the iterations",
+                "driver.quit()"
+            };
+            File.WriteAllLines("script1.py", lines);
+
+            if (MessageBox.Show("The script has been generated in placed in your folder.\nDo you want to run it now?\nNote that running the script will requite the application to kill all chrome processes first", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
+                return;
+
+            ChromeManager.CloseChrome();
+
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = "python";  // Replace with the path to your Python interpreter if needed
+            startInfo.Arguments = "script1.py";  // Replace with the path to your Python script
+
+            // Optional: Specify working directory, input/output redirection, etc.
+            // startInfo.WorkingDirectory = "path/to/working_directory";
+            // startInfo.RedirectStandardInput = true;
+            // startInfo.RedirectStandardOutput = true;
+
+            // Start the process
+            Process process = new Process();
+            process.StartInfo = startInfo;
+            process.Start();
+
+            // Wait for the process to exit
+            process.WaitForExit();
+
+            string output = process.StandardOutput.ReadToEnd();
         }
     }
 }

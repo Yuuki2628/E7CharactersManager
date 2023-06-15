@@ -993,12 +993,15 @@ namespace E7CharactersManager
             }
             return character;
         }
+    }
 
+    internal class ChromeManager
+    { 
         /// <summary>
         /// Check if the folder contains the images for the characters in the proper format<br></br>
         /// If not, open Chrome tabs for each missing character
         /// </summary>
-        public void OpenMissingImagesWeb()
+        public static void OpenMissingImagesWeb(List<Character> List)
         {
             string url = "https://www.e7vau.lt/portrait-viewer.html?id=";
             string appPath = AppDomain.CurrentDomain.BaseDirectory + "Portraits";
@@ -1018,7 +1021,7 @@ namespace E7CharactersManager
         /// </summary>
         /// <param name="url">URL to open</param>
         /// <param name="retry">Always true, if false Chrome won't launch if not open</param>
-        public void OpenNewTab(string url, bool retry = true)
+        public static void OpenNewTab(string url, bool retry = true)
         {
             Process[] chromeProcesses = Process.GetProcessesByName("chrome");
             if (chromeProcesses.Length > 0)
@@ -1039,6 +1042,21 @@ namespace E7CharactersManager
             // No existing Chrome window found, start a new instance with the specified URL
             Process.Start("chrome.exe", "--new-window " + url);
             if (retry) OpenNewTab(url, false);
+        }
+
+        /// <summary>
+        /// Kill Chrome
+        /// </summary>
+        public static void CloseChrome()
+        {
+            Process[] chromeProcesses = Process.GetProcessesByName("chrome");
+            if (chromeProcesses.Length > 0)
+            {
+                foreach (Process chromeProcess in chromeProcesses)
+                {
+                    chromeProcess.Kill();
+                }
+            }
         }
     }
 }
