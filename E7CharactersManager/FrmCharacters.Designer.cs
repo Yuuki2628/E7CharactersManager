@@ -46,6 +46,7 @@
             this.lblCredits = new System.Windows.Forms.Label();
             this.btnSource = new System.Windows.Forms.Button();
             this.btnExportList = new System.Windows.Forms.Button();
+            this.btnOpenMissingImages = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblFilterClass
@@ -245,11 +246,22 @@
             this.btnExportList.UseVisualStyleBackColor = true;
             this.btnExportList.Click += new System.EventHandler(this.btnExportList_Click);
             // 
+            // btnOpenMissingImages
+            // 
+            this.btnOpenMissingImages.Location = new System.Drawing.Point(265, 81);
+            this.btnOpenMissingImages.Name = "btnOpenMissingImages";
+            this.btnOpenMissingImages.Size = new System.Drawing.Size(81, 23);
+            this.btnOpenMissingImages.TabIndex = 18;
+            this.btnOpenMissingImages.Text = "Missing pics";
+            this.btnOpenMissingImages.UseVisualStyleBackColor = true;
+            this.btnOpenMissingImages.Click += new System.EventHandler(this.btnOpenMissingImages_Click);
+            // 
             // E7CharactersList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(356, 373);
+            this.Controls.Add(this.btnOpenMissingImages);
             this.Controls.Add(this.btnExportList);
             this.Controls.Add(this.btnSource);
             this.Controls.Add(this.lblCredits);
@@ -297,6 +309,7 @@
         private System.Windows.Forms.Label lblCredits;
         private System.Windows.Forms.Button btnSource;
         private System.Windows.Forms.Button btnExportList;
+        private System.Windows.Forms.Button btnOpenMissingImages;
     }
 }
 

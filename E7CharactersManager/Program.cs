@@ -12,11 +12,11 @@ namespace E7CharactersManager
         /// Punto di ingresso principale dell'applicazione.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new E7CharactersList());
+            Application.Run(new E7CharactersList(args));
         }
     }
 }

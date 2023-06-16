@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Security.Permissions;
+using System.Security.Principal;
 using System.Windows.Forms;
 
 namespace E7CharactersManager
@@ -18,10 +20,12 @@ namespace E7CharactersManager
         private CharactersList CharactersList { get; set; }
         private bool Initializing { get; set; } = true;
 
-        public E7CharactersList()
+        public E7CharactersList(string[] args)
         {
             InitializeComponent();
-            CheckForUpdate();
+
+            CheckForUpdate(args);
+            
             for (int i = 0; i < checkListClass.Items.Count; i++) checkListClass.SetItemChecked(i, true);
             for (int i = 0; i < checkListElements.Items.Count; i++) checkListElements.SetItemChecked(i, true);
             for (int i = 0; i < checkListRarity.Items.Count; i++) checkListRarity.SetItemChecked(i, true);
@@ -34,7 +38,7 @@ namespace E7CharactersManager
             Initializing = false;
         }
 
-        private void CheckForUpdate()
+        private void CheckForUpdate(string[] args)
         {
             WebClient webClientVersionCheck = new WebClient();
             WebClient webClientApplicationDownload = new WebClient();
@@ -44,12 +48,38 @@ namespace E7CharactersManager
             int LocalVersionValue = (Int32.Parse(Version.Split('.')[0]) * 100) + (Int32.Parse(Version.Split('.')[1]) * 10) + (Int32.Parse(Version.Split('.')[2]) * 1);
             int ServerVersionValue = (Int32.Parse(ServerVersion.Split('.')[0]) * 100) + (Int32.Parse(ServerVersion.Split('.')[1]) * 10) + (Int32.Parse(ServerVersion.Split('.')[2]) * 1);
 
-            if (ServerVersionValue > LocalVersionValue)
+            //if (ServerVersionValue > LocalVersionValue)
+            if (true)
             {
-                if (MessageBox.Show($"New update available!\nCurrently on version: {Version}\nNew version:{ServerVersion}", "Update available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if ((args.Length > 0 && args[0] == "admin-update") || MessageBox.Show($"New update available!\nCurrently on version: {Version}\nNew version:{ServerVersion}", "Update available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     try
                     {
+                        if (!(args.Length > 0 && args[0] == "admin-update"))
+                        {
+                            // Prompt the user for administrator credentials by launching a new process
+                            ProcessStartInfo startInfo = new ProcessStartInfo();
+                            startInfo.FileName = Application.ExecutablePath;
+                            startInfo.Arguments = "admin-update";
+                            startInfo.Verb = "runas"; // Request elevation
+                            try
+                            {
+                                Process.Start(startInfo);
+                                this.Close();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Error requesting administrator privileges: " + ex.Message);
+                                this.Close();
+                            }
+                        }
+
+                        WindowsIdentity identity = WindowsIdentity.GetCurrent();
+                        WindowsPrincipal principal = new WindowsPrincipal(identity);
+
+                        bool isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
+                        if (!isAdmin) return;
+
                         if (File.Exists(AppPath)) File.Delete(AppPath);
                         webClientApplicationDownload.DownloadFile(ServerZipPath, ZipPath);
 
@@ -335,13 +365,8 @@ namespace E7CharactersManager
             ChromeManager.CloseChrome();
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = "python";  // Replace with the path to your Python interpreter if needed
-            startInfo.Arguments = "script1.py";  // Replace with the path to your Python script
-
-            // Optional: Specify working directory, input/output redirection, etc.
-            // startInfo.WorkingDirectory = "path/to/working_directory";
-            // startInfo.RedirectStandardInput = true;
-            // startInfo.RedirectStandardOutput = true;
+            startInfo.FileName = "python";
+            startInfo.Arguments = "script1.py";
 
             // Start the process
             Process process = new Process();
@@ -352,6 +377,15 @@ namespace E7CharactersManager
             process.WaitForExit();
 
             string output = process.StandardOutput.ReadToEnd();
+        }
+
+        private void btnOpenMissingImages_Click(object sender, EventArgs e)
+        {
+            foreach (Character character in cmbCharactersList.Items)
+            {
+                if (!File.Exists("Portraits/" + character.CID + ".png"))
+                    ChromeManager.OpenNewTab("https://www.e7vau.lt/portrait-viewer.html?id=" + character.CID);
+            }
         }
     }
 }
