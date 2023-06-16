@@ -12,11 +12,11 @@ namespace E7CharactersManager
 {
     public partial class E7CharactersList : Form
     {
-        private const string Version = "1.2.0";
-        private const string AppPath = @"E7CharacterViewSetup.msi";
-        private const string ZipPath = @"E7CharacterViewSetup.zip";
-        private const string ServerVersionPath = "https://raw.githubusercontent.com/Yuuki2628/E7CharactersManager/master/E7CharactersManager/Update/Version.txt";
-        private const string ServerZipPath = "https://raw.githubusercontent.com/Yuuki2628/E7CharactersManager/master/E7CharactersManager/Update/E7CharacterViewSetup.zip";
+        private readonly string Version = File.ReadAllText("Update\\Version.txt");
+        private readonly string AppPath = @"E7CharacterViewSetup.msi";
+        private readonly string ZipPath = @"E7CharacterViewSetup.zip";
+        private readonly string ServerVersionPath = "https://raw.githubusercontent.com/Yuuki2628/E7CharactersManager/master/E7CharactersManager/Update/Version.txt";
+        private readonly string ServerZipPath = "https://raw.githubusercontent.com/Yuuki2628/E7CharactersManager/master/E7CharactersManager/Update/E7CharacterViewSetup.zip";
         private CharactersList CharactersList { get; set; }
         private bool Initializing { get; set; } = true;
 
@@ -48,8 +48,7 @@ namespace E7CharactersManager
             int LocalVersionValue = (Int32.Parse(Version.Split('.')[0]) * 100) + (Int32.Parse(Version.Split('.')[1]) * 10) + (Int32.Parse(Version.Split('.')[2]) * 1);
             int ServerVersionValue = (Int32.Parse(ServerVersion.Split('.')[0]) * 100) + (Int32.Parse(ServerVersion.Split('.')[1]) * 10) + (Int32.Parse(ServerVersion.Split('.')[2]) * 1);
 
-            //if (ServerVersionValue > LocalVersionValue)
-            if (true)
+            if (ServerVersionValue > LocalVersionValue)
             {
                 if ((args.Length > 0 && args[0] == "admin-update") || MessageBox.Show($"New update available!\nCurrently on version: {Version}\nNew version:{ServerVersion}", "Update available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
