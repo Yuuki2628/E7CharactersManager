@@ -102,10 +102,11 @@
             this.checkListProperties.CheckOnClick = true;
             this.checkListProperties.FormattingEnabled = true;
             this.checkListProperties.Items.AddRange(new object[] {
-            "ClothesChange",
-            "Collab",
             "Skin",
-            "SpecialtyChange"});
+            "Moonlight",
+            "SpecialtyChange",
+            "Collab",
+            "ClothesChange"});
             this.checkListProperties.Location = new System.Drawing.Point(185, 251);
             this.checkListProperties.Name = "checkListProperties";
             this.checkListProperties.Size = new System.Drawing.Size(161, 94);
@@ -220,11 +221,11 @@
             // lblCredits
             // 
             this.lblCredits.AutoSize = true;
-            this.lblCredits.Location = new System.Drawing.Point(122, 352);
+            this.lblCredits.Location = new System.Drawing.Point(142, 352);
             this.lblCredits.Name = "lblCredits";
-            this.lblCredits.Size = new System.Drawing.Size(106, 13);
+            this.lblCredits.Size = new System.Drawing.Size(82, 13);
             this.lblCredits.TabIndex = 15;
-            this.lblCredits.Text = "Application by: Yuuki";
+            this.lblCredits.Text = "Demo by: Yuuki";
             // 
             // btnSource
             // 

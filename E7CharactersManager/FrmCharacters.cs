@@ -221,25 +221,69 @@ namespace E7CharactersManager
 
             if (!gdList.Contains(HeroGender.Male))           CharactersList.FilterList(FilterType.ByGender.RemoveAllMales);
             if (!gdList.Contains(HeroGender.Female))         CharactersList.FilterList(FilterType.ByGender.RemoveAllFemales);
-            
-            if (!ppList.Contains(Property.ClothesChange))    CharactersList.FilterList(FilterType.ByProperty.RemoveAllClothesChange);
+
             if (!ppList.Contains(Property.Skin))             CharactersList.FilterList(FilterType.ByProperty.RemoveAllSkin);
+            if (!ppList.Contains(Property.Moonlight))        CharactersList.FilterList(FilterType.ByProperty.RemoveAllMoonlight);
             if (!ppList.Contains(Property.SpecialtyChange))  CharactersList.FilterList(FilterType.ByProperty.RemoveAllSpecialtyChange);
             if (!ppList.Contains(Property.Collab))           CharactersList.FilterList(FilterType.ByProperty.RemoveAllCollab);
+            if (!ppList.Contains(Property.ClothesChange))    CharactersList.FilterList(FilterType.ByProperty.RemoveAllClothesChange);
         
             cmbCharactersList.Items.Clear();
             cmbCharactersList.Text = string.Empty;
             foreach (Character character in CharactersList.List) cmbCharactersList.Items.Add(character);
         }
 
-        private void E7CharactersList_Load(object sender, EventArgs e) => LoadFilteredList();
-        private void checkListClass_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
-        private void checkListElements_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
-        private void checkListRarity_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
-        private void checkListGender_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
+        private string RequestInputString(string formTitle, string formMessage)
+        {
+            string userInput = "";
+
+            using (var form = new Form())
+            using (var label = new Label())
+            using (var textBox = new TextBox())
+            using (var okButton = new Button())
+            using (var cancelButton = new Button())
+            {
+                form.Text = formTitle;
+                form.TopMost = this.TopMost;
+                form.MaximizeBox = false;
+                form.FormBorderStyle = FormBorderStyle.FixedSingle;
+                textBox.Width = 200;
+                label.Text = formMessage;
+                okButton.Text = "OK";
+                cancelButton.Text = "Cancel";
+
+                okButton.DialogResult = DialogResult.OK;
+                cancelButton.DialogResult = DialogResult.Cancel;
+
+                // Position the controls in the form
+                form.ClientSize = new System.Drawing.Size(300, 100);
+                label.Location = new System.Drawing.Point(50, 15);
+                textBox.Location = new System.Drawing.Point(50, 35);
+                okButton.Location = new System.Drawing.Point(50, 60);
+                cancelButton.Location = new System.Drawing.Point(130, 60);
+
+                form.Controls.AddRange(new Control[] { textBox, label, okButton, cancelButton });
+
+                // Show the form and wait for user input
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    userInput = textBox.Text;
+                }
+            }
+            return userInput;
+        }
+
+        private void E7CharactersList_Load(object sender, EventArgs e)                    => LoadFilteredList();
+        private void checkListClass_SelectedIndexChanged(object sender, EventArgs e)      => LoadFilteredList();
+        private void checkListElements_SelectedIndexChanged(object sender, EventArgs e)   => LoadFilteredList();
+        private void checkListRarity_SelectedIndexChanged(object sender, EventArgs e)     => LoadFilteredList();
+        private void checkListGender_SelectedIndexChanged(object sender, EventArgs e)     => LoadFilteredList();
         private void checkListProperties_SelectedIndexChanged(object sender, EventArgs e) => LoadFilteredList();
 
-        private void chbAlwaysOnTop_CheckedChanged(object sender, EventArgs e) => this.TopMost = chbAlwaysOnTop.Checked;
+        private void chbAlwaysOnTop_CheckedChanged(object sender, EventArgs e)
+        {
+            this.TopMost = chbAlwaysOnTop.Checked;
+        }
 
         private void btnSource_Click(object sender, EventArgs e)
         {
@@ -272,6 +316,9 @@ namespace E7CharactersManager
             if (MessageBox.Show("This application works only if you have the following installed:\n-Chrome\n-Python\n-Selenium for Python\n\nDo you have all of them installed?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
                 return;
 
+            string url = RequestInputString("Form url", "Please input the url for the voting form");
+            if (url == "") return;
+
             string list = "[";
             foreach (Character character in cmbCharactersList.Items) list += $"\"{character.Name} : {character.CID} \", ";
             list += "]";
@@ -300,7 +347,7 @@ namespace E7CharactersManager
                 "for element in elements:",
                 "",
                 "    # Load the form URL",
-                "    driver.get('https://animebracket.com/epic-seven-best-waifu-contest-2023/nominate')",
+                "    driver.get('" + url + "')",
                 "    driver.find_element(By.CLASS_NAME, 'accept').click()",
                 "    time.sleep(1)",
                 "",
@@ -310,7 +357,7 @@ namespace E7CharactersManager
                 "    field3 = driver.find_element(By.ID, 'txtPic')",
                 "",
                 "    chname = element.split(' : ')[0]",
-                "    chlink = 'https://github.com/Yuuki2628/E7CharactersManager/tree/master/E7CharactersManager/Portrait' + element.split(' : ')[1]",
+                "    chlink = 'https://raw.githubusercontent.com/Yuuki2628/E7CharactersManager/master/E7CharactersManager/Portraits/' + element.split(' : ')[1].strip() + '.png'",
                 "    ",
                 "    field1.send_keys(chname)",
                 "    field2.send_keys('Epic Seven')",
@@ -322,7 +369,7 @@ namespace E7CharactersManager
                 "    time.sleep(3)",
                 "    ",
                 "# Load the form URL",
-                "driver.get('https://animebracket.com/me/process/epic-seven-best-waifu-contest-2023/nominations/')",
+                "driver.get('" + url.Replace("nominate", "nominations") + "')",
                 "time.sleep(2)",
                 "",
                 "try:",
@@ -358,7 +405,7 @@ namespace E7CharactersManager
             };
             File.WriteAllLines("script1.py", lines);
 
-            if (MessageBox.Show("The script has been generated in placed in your folder.\nDo you want to run it now?\nNote that running the script will requite the application to kill all chrome processes first", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
+            if (MessageBox.Show("The script has been generated and placed in your folder.\nDo you want to run it now?\nNote that running the script will requite the application to kill all chrome processes first", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
                 return;
 
             ChromeManager.CloseChrome();
@@ -375,7 +422,11 @@ namespace E7CharactersManager
             // Wait for the process to exit
             process.WaitForExit();
 
-            string output = process.StandardOutput.ReadToEnd();
+            try
+            {
+                string output = process.StandardOutput.ReadToEnd();
+            }
+            catch { }
         }
 
         private void btnOpenMissingImages_Click(object sender, EventArgs e)
