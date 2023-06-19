@@ -186,17 +186,20 @@ namespace E7CharactersManager
             {
                 switch (check)
                 {
-                    case "ClothesChange":
-                        ppList.Add(Property.ClothesChange);
+                    case "Skin":
+                        ppList.Add(Property.Skin);
+                        break;
+                    case "Moonlight":
+                        ppList.Add(Property.Moonlight);
+                        break;
+                    case "SpecialtyChange":
+                        ppList.Add(Property.SpecialtyChange);
                         break;
                     case "Collab":
                         ppList.Add(Property.Collab);
                         break;
-                    case "Skin":
-                        ppList.Add(Property.Skin);
-                        break;
-                    case "SpecialtyChange":
-                        ppList.Add(Property.SpecialtyChange);
+                    case "ClothesChange":
+                        ppList.Add(Property.ClothesChange);
                         break;
                 }
             }
@@ -316,7 +319,7 @@ namespace E7CharactersManager
             if (MessageBox.Show("This application works only if you have the following installed:\n-Chrome\n-Python\n-Selenium for Python\n\nDo you have all of them installed?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
                 return;
 
-            string url = RequestInputString("Form url", "Please input the url for the voting form");
+            string url = RequestInputString("Form url", "Please input the tournament name url");
             if (url == "") return;
 
             string list = "[";
@@ -347,7 +350,7 @@ namespace E7CharactersManager
                 "for element in elements:",
                 "",
                 "    # Load the form URL",
-                "    driver.get('" + url + "')",
+                "    driver.get('" + "https://animebracket.com/" + url + "/nominate" + "')",
                 "    driver.find_element(By.CLASS_NAME, 'accept').click()",
                 "    time.sleep(1)",
                 "",
@@ -366,10 +369,10 @@ namespace E7CharactersManager
                 "    # Submit the form",
                 "    driver.find_elements(By.CLASS_NAME , 'small-button')[1].click()",
                 "    print(chlink + ' - ' + chname)",
-                "    time.sleep(3)",
+                "    time.sleep(5)",
                 "    ",
                 "# Load the form URL",
-                "driver.get('" + url.Replace("nominate", "nominations") + "')",
+                "driver.get('" + "https://animebracket.com/me/process/" + url + "/nominations/" + "')",
                 "time.sleep(2)",
                 "",
                 "try:",
